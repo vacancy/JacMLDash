@@ -37,12 +37,12 @@
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 text-muted">Experiments</h6>
                 <div class="list-group list-group-root card">
                     {% for desc in descs %}
-                    <a href="#desc-{{ desc.desc_name }}" class="list-group-item desc-link" data-toggle="collapse" aria-expanded="true">
-                        <i class="fa fa-angle-down mr-2"></i>{{ desc.desc_name }}
+                    <a href="#desc/{{ desc.desc_name }}" class="list-group-item desc-link">
+                        {{ desc.desc_name }}
                     </a>
-                    <div class="list-group collapse show" id="desc-{{ desc.desc_name }}">
+                    <div class="list-group" id="desc-{{ desc.desc_name }}">
                         {% for expr in desc.exprs.execute() %}
-                        <a href="#expr-{{ desc.desc_name }}-{{ expr.expr_name }}" id="expr-{{ desc.desc_name }}-{{ expr.expr_name }}-link" class="list-group-item expr-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" onClick="showExpr(this)">{{ expr.expr_name }}</a>
+                        <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}" class="list-group-item expr-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" onClick="loadPage(this)">{{ expr.expr_name }}</a>
                         {% end %}
                     </div>
                     {% end %}
@@ -54,32 +54,22 @@
         </main>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="https://getbootstrap.com/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+<script src="static/js/dashboard.js"></script>
 <script>
-$(function() {
-  $('.list-group-item').on('click', function() {
-    $('.fa', this)
-      .toggleClass('fa-angle-right')
-      .toggleClass('fa-angle-down');
-  });
-});
+// $(function() {
+//   $('.list-group-item').on('click', function() {
+//     $('.fa', this)
+//       .toggleClass('fa-angle-right')
+//       .toggleClass('fa-angle-down');
+//   });
+// });
 
-function showExpr(elem) {
-    $.get('expr', { desc: $(elem).data('desc'), expr: $(elem).data('expr') }, function(data, status) {
-        $("#main").html(data);
-    });
-    return true;
-}
-function showRun(elem){
-    $.get('run', { desc: $(elem).data('desc'), expr: $(elem).data('expr'), run: $(elem).data('run') }, function(data, status) {
-        $("#main").html(data);
-    });
-    return true;
-}
+$(function() {
+    loadHash();
+    window.onhashchange = loadHash;
+});
 </script>
 </body>
 </html>

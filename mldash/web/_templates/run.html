@@ -1,9 +1,11 @@
+{% autoescape None %}
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">{{ desc.desc_name }}</li>
-        <li class="breadcrumb-item">{{ expr.expr_name }}</li>
-        <li class="breadcrumb-item active" aria-current="page">{{ run.run_name }}</li>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#desc/{{ desc.desc_name }}" onClick="loadPage(this)">{{ desc.desc_name }}</a></li>
+            <li class="breadcrumb-item"><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}" onClick=loadPage(this)>{{ expr.expr_name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ run.run_name }}</li>
       </ol>
     </nav>
 <!--     <div class="btn-toolbar mb-2 mb-md-0">
@@ -17,39 +19,79 @@
         </button>
     </div> -->
 </div>
-<div class="run-main fluid-container">
-            <dl class="row">
-                <dt class="col-sm-3">Desc Description</dt>
-                <dd class="col-sm-9">{{ desc.desc_description }}</dd>
-                <dt class="col-sm-3">Desc Notes</dt>
-                <dd class="col-sm-9">{{ desc.desc_notes }}</dd>
-                <dt class="col-sm-3">Expr Description</dt>
-                <dd class="col-sm-9">{{ expr.expr_description }}</dd>
-                <dt class="col-sm-3">Expr Notes</dt>
-                <dd class="col-sm-9">{{ expr.expr_notes }}</dd>
-                <dt class="col-sm-3">Run Description</dt>
-                <dd class="col-sm-9">{{ run.run_description }}</dd>
-                <dt class="col-sm-3">Run Notes</dt>
-                <dd class="col-sm-9">{{ run.run_notes }}</dd>
-                {% if run.refer is not None %}
-                <dt class="col-sm-3">Parent</dt>
-                <dd class="col-sm-9">{{ run.refer.run_name }}</dd>
+<div class="experiment fluid-container">
+    <dl class="row">
+        <!--dt class="col-sm-12">Desc Description</dt>
+            <dd class="col-sm-12">{{ desc.desc_description }}</dd>
+            <dt class="col-sm-12">Desc Notes</dt>
+            <dd class="col-sm-12">{{ desc.desc_notes }}</dd>
+            <dt class="col-sm-12">Expr Description</dt>
+            <dd class="col-sm-12">{{ expr.expr_description }}</dd>
+            <dt class="col-sm-12">Expr Notes</dt>
+            <dd class="col-sm-12">{{ expr.expr_notes }}</dd-->
+            <dt class="col-sm-12">Run Description</dt>
+            <dd class="col-sm-12">{{ run.run_description }}</dd>
+            <dt class="col-sm-12">Run Notes</dt>
+            <dd class="col-sm-12">{{ run.run_notes }}</dd>
+            <dt class="col-sm-12">Create Time</dt>
+            <dd class="col-sm-12">{{ run.create_time }}</dd>
+            <dt class="col-sm-12">Update Time</dt>
+            <dd class="col-sm-12">{{ run.update_time }}</dd>
+
+            {% if run.refer is not None %}
+            <dt class="col-sm-12">Parent</dt>
+            <dd class="col-sm-12">{{ run.refer.run_name }}
+            <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.refer.run_name }}">{{ run.refer.run_name }}</a>
+            </dd>
+            {% end %}
+
+            <dt class="col-sm-12">Metrics</dt>
+            <dd class="col-sm-12">{{ format_kv(run.metrics) }}</dd>
+            <dt class="col-sm-12">Command</dt>
+            <dd class="col-sm-12"><code>{{ run.command }}</code></dd>
+            <dt class="col-sm-12">Args</dt>
+            <dd class="col-sm-12">{{ format_kv(run.args) }}</dd>
+            <dt class="col-sm-12">Configs</dt>
+            <dd class="col-sm-12">{{ format_kv(run.configs) }}</dd>
+            <dt class="col-sm-12">Metainfo File</dt>
+            <dd class="col-sm-12">{{ format_log_fpath(run.metainfo_file) }}</dd>
+            <dt class="col-sm-12">Log File</dt>
+            <dd class="col-sm-12">{{ format_log_fpath(run.log_file) }}</dd>
+            <dt class="col-sm-12">Meter File</dt>
+            <dd class="col-sm-12">{{ format_log_fpath(run.meter_file) }}</dd>
+            <dt class="col-sm-12">TensorBoard Dir</dt>
+            <dd class="col-sm-12"><pre>{{ run.tb_dir }}</pre></dd>
+            <dt class="col-sm-12">Extra Information</dt>
+            <dd class="col-sm-12"><pre>{{ run.extra_info }}</pre></dd>
+    </dl>
+
+    {% if len(run.referee) > 0 %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr><th>Sub-Runs</th></tr>
+            </thead>
+            <tbody>
+                {% for rrun in run.referee %}
+                <tr>
+                    <td>
+                        <div><b>SubRun:</b>
+                            <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ rrun.run_name }}" onClick="loadPage(this)" class="run-link">{{ rrun.run_name }}</a>
+                            (<b>Created:</b> {{ rrun.create_time }}; <b>Updated</b>: {{ rrun.update_time }})
+                        </div>
+                        <div><b>Metrics:</b> {{ format_kv_inline(rrun.metrics) }}</div>
+                        <div><b>Command:</b> <code>{{ rrun.command }}</code></div>
+                        <div><b>Highlight args:</b> {{ format_kv_inline(rrun.highlight_args) }}</div>
+                        <div><b>Highlight configs:</b> {{ format_kv_inline(rrun.highlight_configs) }}</div>
+                        {% if rrun.refer is not None %}
+                        <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ rrun.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ rrun.refer.run_name }}</a></span></div>
+                        {% end %}
+                        <div><b>Description:</b> <span>{{ rrun.run_description }}</span></div>
+                    </td>
+                </tr>
                 {% end %}
-                <dt class="col-sm-3">Command</dt>
-                <dd class="col-sm-9"><pre>{{ run.command }}</pre></dd>
-                <dt class="col-sm-3">Args</dt>
-                <dd class="col-sm-9"><pre>{{ run.args }}</pre></dd>
-                <dt class="col-sm-3">Configs</dt>
-                <dd class="col-sm-9"><pre>{{ run.configs }}</pre></dd>
-                <dt class="col-sm-3">Metainfo File</dt>
-                <dd class="col-sm-9"><pre>{{ run.metainfo_file }}</pre></dd>
-                <dt class="col-sm-3">Log File</dt>
-                <dd class="col-sm-9"><pre>{{ run.log_file }}</pre></dd>
-                <dt class="col-sm-3">Meter File</dt>
-                <dd class="col-sm-9"><pre>{{ run.meter_file }}</pre></dd>
-                <dt class="col-sm-3">TensorBoard Dir</dt>
-                <dd class="col-sm-9"><pre>{{ run.tb_dir }}</pre></dd>
-                <dt class="col-sm-3">Extra Information</dt>
-                <dd class="col-sm-9"><pre>{{ run.extra_info }}</pre></dd>
-            </dl>
+            </tbody>
+        </table>
+    </div>
+    {% end %}
 </div>

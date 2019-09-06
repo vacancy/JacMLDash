@@ -12,9 +12,11 @@ import os.path as osp
 import jacinle.io as io
 from jacinle.logging import get_logger
 from jacinle.cli.argument import JacArgumentParser
+from jacinle.utils.imp import load_source
 from jacweb.web import make_app
 from mldash.data.orm import init_database, init_project, ProjectMetainfo, Desc, Experiment, Run
 from mldash.web.path import get_static_path, get_template_path
+from mldash.web.ui_methods import get_ui_methods, register_ui_methods
 
 import tornado.ioloop
 
@@ -23,6 +25,7 @@ logger = get_logger(__file__)
 parser = JacArgumentParser()
 parser.add_argument('--logdir', required=True)
 parser.add_argument('--port', type=int, default=8081)
+parser.add_argument('--debug', action='store_true')
 args = parser.parse_args()
 
 
@@ -30,17 +33,25 @@ def main():
     init_database(args.logdir)
     init_project()
 
+    py_filename = osp.join('jacmldash.py')
+    if osp.isfile(py_filename):
+        logger.critical('Loading JacMLDash config: {}.'.format(osp.abspath(py_filename)))
+        config = load_source(py_filename)
+        if hasattr(config, 'ui_methods'):
+            register_ui_methods(config.ui_methods)
+
     app = make_app([
         'mldash.web.app.index',
         'mldash.web.app.experiment',
-        'mldash.web.app.run'
+        'mldash.plugins.tensorboard.handler'
     ], {
         'gzip': True,
-        'debug': False,
+        'debug': args.debug,
         'xsrf_cookies': True,
 
         'static_path': get_static_path(),
         'template_path': get_template_path(),
+        'ui_methods': get_ui_methods(),
 
         "cookie_secret": "20f42d0ae6548e88cf9788e725b298bd",
         "session_secret": "3cdcb1f00803b6e78ab50b466a40b9977db396840c28307f428b25e2277f1bcc",

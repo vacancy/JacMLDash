@@ -1,9 +1,11 @@
+{% autoescape None %}
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">{{ desc.desc_name }}</li>
-        <li class="breadcrumb-item active" aria-current="page">{{ expr.expr_name }}</li>
-      </ol>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#desc/{{ desc.desc_name }}" onClick="loadPage(this)">{{ desc.desc_name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ expr.expr_name }}</li>
+        </ol>
     </nav>
 <!--     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
@@ -17,37 +19,75 @@
     </div> -->
 </div>
 
+<div class="experiment">
     <dl class="row">
-        <dt class="col-sm-2">Desc Description</dt>
-        <dd class="col-sm-10">{{ desc.desc_description }}</dd>
-        <dt class="col-sm-2">Desc Notes</dt>
-        <dd class="col-sm-10">{{ desc.desc_notes }}</dd>
-        <dt class="col-sm-2">Expr Description</dt>
-        <dd class="col-sm-10">{{ expr.expr_description }}</dd>
-        <dt class="col-sm-2">Expr Notes</dt>
-        <dd class="col-sm-10">{{ expr.expr_notes }}</dd>
+        <dt>Expr Description</dt>
+        <dd>{{ expr.expr_description }}</dd>
+        <dt>Expr Notes</dt>
+        <dd>{{ expr.expr_notes }}</dd>
+        <dt>Create Time</dt>
+        <dd>{{ expr.create_time }}</dd>
+        <dt>Update Time</dt>
+        <dd>{{ expr.update_time }}</dd>
+        <dt>Metrics</dt>
+        <dd>{{ format_kv(expr.metrics) }}</dd>
     </dl>
 
-<div class="table-responsive">
-    <table class="table table-striped table-sm">
-        <thead>
-            <tr><th>Runs</th></tr>
-        </thead>
-        <tbody>
-            {% for run in expr.runs %}
-            {% if run.is_master %}
-            <tr><td>
-                <div><b>Run:</b><a href="#run-{{ desc.desc_name }}-{{ expr.expr_name }}-{{ run.run_name }}" id="run-{{ desc.desc_name }}-{{ expr.expr_name }}-{{ run.run_name }}-link" class="run-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" onClick="showRun(this)">{{ run.run_name }}</a></div>
-                <div><b>Description:</b> <span>{{ run.run_description }}</span></div>
-                <div><b>Highlight args:</b> <span>{{ run.highlight_args }}</span></div>
-                <div><b>Highlight configs:</b> <span>{{ run.highlight_configs }}</span></div>
-                <div><b>Command:</b> <span>{{ run.command }}</span></div>
-                {% if run.refer is not None %}
-                <div><b>Parent:</b> <span><a href="#run-{{ desc.desc_name }}-{{ expr.expr_name }}-{{ run.run_name }}" id="run-{{ desc.desc_name }}-{{ expr.expr_name }}-{{ run.refer.run_name }}-link" class="run-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.refer.run_name }}">{{ run.refer.run_name }}</a></span></div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="header clearfix">
+                            <h5 class="float-left">Runs</h5>
+                            <div class="float-right"><a href="javascript:;" onClick="runTensorboard(this)" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}">Tensorboard</a></div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for run in expr.runs %}
+                {% if run.is_master %}
+                <tr>
+                    <td class="run-row" data-run="{{ run.run_name }}">
+                        <div class="header clearfix">
+                        <div class="float-left"><b>Run:</b>
+                            <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link">{{ run.run_name }}</a>
+                            (<b>Created:</b> {{ run.create_time }}; <b>Updated</b>: {{ run.update_time }})
+                        </div>
+                        <div class="float-right">TB <input type="checkbox" /></div>
+                        </div>
+
+                        <div><b>Metrics:</b> {{ format_kv_inline(run.metrics) }}</div>
+                        <div><b>Command:</b> <code>{{ run.command }}</code></div>
+                        <div><b>Highlight args:</b> {{ format_kv_inline(run.highlight_args) }}</div>
+                        <div><b>Highlight configs:</b> {{ format_kv_inline(run.highlight_configs) }}</div>
+                        {% if run.refer is not None %}
+                        <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
+                        {% end %}
+                        <div><b>Description:</b> <span>{{ run.run_description }}</span></div>
+                    </td>
+                </tr>
                 {% end %}
-            </td></tr>
-            {% end %}
-            {% end %}
-        </tbody>
-    </table>
+                {% end %}
+            </tbody>
+        </table>
+    </div>
+    {% if len(tensorboards) > 0 %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr><th><h5>TensorBoards</h5></th></tr>
+            </thead>
+            <tbody>
+                {% for run in tensorboards %}
+                <tr><td>
+                    <div><b>Link:</b> {{ format_tb_link(run['port']) }}</div>
+                    <div><b>Log Dirs:</b> {{ format_kv(run['logdirs']) }}</div>
+                </td></tr>
+                {% end %}
+            </tbody>
+        </table>
+    </div>
+    {% end %}
 </div>

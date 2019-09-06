@@ -8,18 +8,16 @@
 # This file is part of JacMLDash.
 # Distributed under terms of the MIT license.
 
-import datetime
+from datetime import datetime
 import peewee
 from .database import register_model
 
 
 class ModelWithCUTime(peewee.Model):
-    create_time = DateTimeField(default=datetime.now)
-    update_time = DateTimeField(default=datetime.now)
+    create_time = peewee.DateTimeField("%Y-%m-%d %H:%M:%S", default=datetime.now)
+    update_time = peewee.DateTimeField("%Y-%m-%d %H:%M:%S", default=datetime.now)
 
     def save(self, *args, **kwargs):
-        if self._get_pk_value() is None:
-            self.create_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         return super().save(*args, **kwargs)
 
@@ -29,6 +27,7 @@ class Desc(ModelWithCUTime):
     desc_name = peewee.CharField(unique=True)
     desc_description = peewee.TextField(null=True)
     desc_notes = peewee.TextField(null=True)
+    metrics = peewee.TextField(null=True)
 
 
 @register_model
@@ -37,6 +36,7 @@ class Experiment(ModelWithCUTime):
     expr_name = peewee.CharField()
     expr_description = peewee.TextField(null=True)
     expr_notes = peewee.TextField(null=True)
+    metrics = peewee.TextField(null=True)
 
     class Meta:
         indexes = [(('desc', 'expr_name'), True)]

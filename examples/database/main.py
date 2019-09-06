@@ -13,7 +13,7 @@ from mldash.data.orm import init_database, ProjectMetainfo, Desc, Experiment, Ru
 
 
 def main():
-    init_database('tmp.db')
+    init_database('.')
 
     ProjectMetainfo.set_all({
         'title': 'Test',

@@ -10,7 +10,7 @@
 
 import os
 import os.path as osp
-import datetime
+from datetime import datetime
 import peewee
 from .database import register_model
 

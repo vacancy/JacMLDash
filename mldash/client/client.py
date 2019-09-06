@@ -9,13 +9,14 @@
 # Distributed under terms of the MIT license.
 
 from mldash.data.orm import init_database, init_project, Desc, Experiment, Run
+import sys
 import jacinle.io as io
 
 __all__ = ['MLDashClient']
 
 
 class MLDashClient(object):
-    def ___init__(self, dump_dir):
+    def __init__(self, dump_dir):
         self.dump_dir = dump_dir
         init_database(self.dump_dir)
         self.desc = None
@@ -24,19 +25,25 @@ class MLDashClient(object):
 
     def init(self, desc_name, expr_name, run_name, args=None, highlight_args=None, configs=None):
         init_project()
-        desc = Desc.get_or_create(desc_name=desc_name)
-        expr = Experiment.get_or_create(desc=desc, expr_name=expr_name)
+        desc, _ = Desc.get_or_create(desc_name=desc_name)
+        expr, _ = Experiment.get_or_create(desc=desc, expr_name=expr_name)
         run = Run(expr=expr, run_name=run_name, command=' '.join(sys.argv))
 
+        run.args = ''
+        run.highlight_args = ''
+
         if args is not None:
-            run.args = io.dumps_json(args.__dict__, compressed=False)
+            run.args = io.dumps_json(args.__dict__)
             if highlight_args is not None:
-                run.highlight_args = io.dumps_json(get_highlight_args(args, highlight_args), compressed=False)
+                run.highlight_args = io.dumps_json(get_highlight_args(args, highlight_args))
+
+        run.configs = ''
+        run.highlight_configs = ''
 
         if configs is not None:
-            run.configs = io.dumps_json(configs, compressed=False)
+            run.configs = io.dumps_json(configs)
             if getattr(args, 'configs', None) is not None:
-                run.highlight_configs = io.dumps_json(args.configs.kvs, compressed=False)
+                run.highlight_configs = io.dumps_json(args.configs.kvs)
 
         run.save()
 
@@ -50,7 +57,44 @@ class MLDashClient(object):
                 setattr(self.run, k, v)
         self.run.save()
 
+    def _log_metric_inner(self, key, value, target, update_func=None):
+        if target.metrics is None:
+            current = dict()
+        else:
+            current = io.loads_json(target.metrics)
+        if update_func is not None:
+            if key in current:
+                current[key] = update_func(current[key], value)
+            else:
+                current[key] = value
+        else:
+            current[key] = value
+        target.metrics = io.dumps_json(current)
+        target.save()
 
-def get_highlight_args(args, highlight_args):
-    return {k: getattr(args, k) for k in highlight_args}
+    def _log_metric_dist(self, key, value, desc, expr, update_func=None):
+        if desc: self._log_metric_inner(key, value, self.desc, update_func)
+        if expr: self._log_metric_inner(key, value, self.expr, update_func)
+        self._log_metric_inner(key, value, self.run, update_func)
+
+    def log_metric(self, key, value, desc=True, expr=True):
+        self._log_metric_dist(key, value, desc, expr)
+
+    def log_metric_max(self, key, value, desc=True, expr=True):
+        self._log_metric_dist(key, value, desc, expr, max)
+
+    def log_metric_min(self, key, value, desc=True, expr=True):
+        self._log_metric_dist(key, value, desc, expr, min)
+
+
+def get_highlight_args(args, parser):
+    highlight_args = parser.highlight_args
+    return {k: getattr(args, k) for k in highlight_args if get_default_value_in_parser(parser, k) != getattr(args, k)}
+
+
+def get_default_value_in_parser(parser, key):
+    for rec in parser._option_string_actions.values():
+        if rec.dest == key:
+            return rec.default
+    return None
 

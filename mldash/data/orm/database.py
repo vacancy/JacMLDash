@@ -10,6 +10,7 @@
 
 import os.path as osp
 import peewee
+import jacinle.io as io
 
 __all__ = ['init_database', 'get_database', 'register_model']
 

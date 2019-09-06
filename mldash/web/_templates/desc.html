@@ -1,0 +1,50 @@
+{% autoescape None %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">{{ desc.desc_name }}</li>
+        </ol>
+    </nav>
+<!--     <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+        </button>
+    </div> -->
+</div>
+
+<div class="experiment">
+    <dl class="row">
+        <dt>Desc Description</dt>
+        <dd>{{ desc.desc_description }}</dd>
+        <dt>Desc Notes</dt>
+        <dd>{{ desc.desc_notes }}</dd>
+        <dt>Metrics</dt>
+        <dd>{{ format_kv(desc.metrics) }}</dd>
+    </dl>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr><th><h5>Experiments</h5></th></tr>
+            </thead>
+            <tbody>
+                {% for expr in desc.exprs %}
+                <tr><td>
+                        <div><b>Experiment:</b>
+                            <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}" onClick="loadPage(this)" onClick="showRun(this)" class="expr-link">{{ expr.expr_name }}</a>
+                            (<b>Created:</b> {{ expr.create_time }}; <b>Updated</b>: {{ expr.update_time }})
+                        </div>
+                        <div><b>Metrics:</b> {{ format_kv_inline(expr.metrics) }}</div>
+                        <div><b>Description:</b> <span>{{ expr.expr_description }}</span></div>
+                    </td></tr>
+                    {% end %}
+            </tbody>
+        </table>
+    </div>
+</div>

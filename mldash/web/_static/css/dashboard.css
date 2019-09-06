@@ -111,11 +111,58 @@ body {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
-.run-main pre {
+.experiment pre {
   margin: 0;
   padding: 0;
 }
 
-.run-main .run-notes {
-  max-width:600px;
+.experiment dt {
+  background-color:#F4F4F4;
+  border: 1px solid #CCCCCC;
+  border-left: none;
+  border-right: none;
+  margin: 0 15px;
+  padding: 0 15px;
+
+  display:block;
+  width:100%;
 }
+
+.experiment dd {
+  display:block;
+  width:100%;
+
+  margin: 0 15px;
+  padding: 0 15px;
+}
+
+.experiment td, .experiment th {
+  padding: 0 15px;
+}
+
+.experiment table {
+  margin-top: 0px;
+}
+.experiment th h5 {
+  font-size: 18px;
+  line-height: 36px;
+  margin: 0;
+}
+.experiment th a {
+  line-height: 36px;
+}
+
+.experiment th div {
+    vertical-align:middle;
+}
+
+.experiment .table-striped thead tr{
+    background-color:#F4F4F4;
+}
+.experiment .table-striped tbody tr:nth-child(odd){
+    background-color:#FFFFFF;
+}
+.experiment .table-striped tbody tr:nth-child(even){
+    background-color:#F4F4F4;
+}
+
