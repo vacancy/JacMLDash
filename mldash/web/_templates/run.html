@@ -1,0 +1,55 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">{{ desc.desc_name }}</li>
+        <li class="breadcrumb-item">{{ expr.expr_name }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ run.run_name }}</li>
+      </ol>
+    </nav>
+<!--     <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+        </button>
+    </div> -->
+</div>
+<div class="run-main fluid-container">
+            <dl class="row">
+                <dt class="col-sm-3">Desc Description</dt>
+                <dd class="col-sm-9">{{ desc.desc_description }}</dd>
+                <dt class="col-sm-3">Desc Notes</dt>
+                <dd class="col-sm-9">{{ desc.desc_notes }}</dd>
+                <dt class="col-sm-3">Expr Description</dt>
+                <dd class="col-sm-9">{{ expr.expr_description }}</dd>
+                <dt class="col-sm-3">Expr Notes</dt>
+                <dd class="col-sm-9">{{ expr.expr_notes }}</dd>
+                <dt class="col-sm-3">Run Description</dt>
+                <dd class="col-sm-9">{{ run.run_description }}</dd>
+                <dt class="col-sm-3">Run Notes</dt>
+                <dd class="col-sm-9">{{ run.run_notes }}</dd>
+                {% if run.refer is not None %}
+                <dt class="col-sm-3">Parent</dt>
+                <dd class="col-sm-9">{{ run.refer.run_name }}</dd>
+                {% end %}
+                <dt class="col-sm-3">Command</dt>
+                <dd class="col-sm-9"><pre>{{ run.command }}</pre></dd>
+                <dt class="col-sm-3">Args</dt>
+                <dd class="col-sm-9"><pre>{{ run.args }}</pre></dd>
+                <dt class="col-sm-3">Configs</dt>
+                <dd class="col-sm-9"><pre>{{ run.configs }}</pre></dd>
+                <dt class="col-sm-3">Metainfo File</dt>
+                <dd class="col-sm-9"><pre>{{ run.metainfo_file }}</pre></dd>
+                <dt class="col-sm-3">Log File</dt>
+                <dd class="col-sm-9"><pre>{{ run.log_file }}</pre></dd>
+                <dt class="col-sm-3">Meter File</dt>
+                <dd class="col-sm-9"><pre>{{ run.meter_file }}</pre></dd>
+                <dt class="col-sm-3">TensorBoard Dir</dt>
+                <dd class="col-sm-9"><pre>{{ run.tb_dir }}</pre></dd>
+                <dt class="col-sm-3">Extra Information</dt>
+                <dd class="col-sm-9"><pre>{{ run.extra_info }}</pre></dd>
+            </dl>
+</div>
