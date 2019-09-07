@@ -2,6 +2,11 @@ body {
   font-size: .875rem;
 }
 
+.inline-pre {
+    font-size: 87.5%;
+  font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+}
+
 .feather {
   width: 16px;
   height: 16px;
@@ -133,16 +138,27 @@ body {
   width:100%;
 }
 
+.experiment dt a {
+  margin-left: 1em;
+  font-weight: normal;
+}
+
 .experiment dd {
   display:block;
 
   margin: 0 15px;
   padding: 0 15px;
+  width:100%;
+}
+
+.experiment textarea {
+    font-size: 87.5%;
 }
 
 .experiment pre {
   display: flex;
   white-space: pre-wrap;
+  min-height: 18px;
 }
 
 .experiment td, .experiment th {

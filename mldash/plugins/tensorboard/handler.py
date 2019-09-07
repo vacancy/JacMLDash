@@ -14,13 +14,20 @@ from jacweb.web import route, JacRequestHandler
 from .manager import tensorboard_manager
 
 
-@route(r'/tensorboard')
-class DescHandler(JacRequestHandler):
+@route(r'/tensorboard/start')
+class TensorboardHandler(JacRequestHandler):
     def get(self):
-        spec = json.loads(self.get_argument('spec', ''))
-        record = tensorboard_manager.start(spec['desc'], spec['expr'], spec['runs'])
+        spec = json.loads(self.get_argument('spec'))
+        record = tensorboard_manager.start(spec)
         host = self.request.host
         if ':' in host:
             host = host[:host.find(':')]
         self.write(io.dumps_json({'url': 'http://' + host + ':' + str(record['port'])}))
+
+
+@route(r'/tensorboard/terminate')
+class TensorboardHandler(JacRequestHandler):
+    def get(self):
+        index = int(self.get_argument('index'))
+        record = tensorboard_manager.terminate(index)
 

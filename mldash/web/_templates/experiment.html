@@ -21,10 +21,10 @@
 
 <div class="experiment">
     <dl class="row">
-        <dt>Expr Description</dt>
-        <dd>{{ expr.expr_description }}</dd>
-        <dt>Expr Notes</dt>
-        <dd>{{ expr.expr_notes }}</dd>
+        <dt>Expr Description <a href="javascript:;" onClick="updateText(this)" id="edit-desc-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-key="expr_description" data-preid="edit-desc">Edit</a></dt>
+        <dd><pre id="edit-desc">{{ expr.expr_description }}</pre></dd>
+        <dt>Expr Notes <a href="javascript:;" onClick="updateText(this)" id="edit-note-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-key="expr_notes" data-preid="edit-note">Edit</a></dt>
+        <dd><pre id="edit-note">{{ expr.expr_notes }}</pre></dd>
         <dt>Create Time</dt>
         <dd>{{ expr.create_time }}</dd>
         <dt>Update Time</dt>
@@ -40,7 +40,7 @@
                     <th>
                         <div class="header clearfix">
                             <h5 class="float-left">Runs</h5>
-                            <div class="float-right"><a href="javascript:;" onClick="runTensorboard(this)" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}">Tensorboard</a></div>
+                            <div class="float-right"><a href="javascript:;" onClick="runTensorboard(this)">Tensorboard</a></div>
                         </div>
                     </th>
                 </tr>
@@ -49,7 +49,7 @@
                 {% for run in expr.runs %}
                 {% if run.is_master %}
                 <tr>
-                    <td class="run-row" data-run="{{ run.run_name }}">
+                    <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-highlight="{{ format_kv_inline(run.highlight_args, html=False) }}">
                         <div class="header clearfix">
                         <div class="float-left"><b>Run:</b>
                             <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link">{{ run.run_name }}</a>
@@ -65,7 +65,7 @@
                         {% if run.refer is not None %}
                         <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
                         {% end %}
-                        <div><b>Description:</b> <span>{{ run.run_description }}</span></div>
+                        <div><b>Description:</b> <span class="inline-pre">{{ run.run_description }}</span></div>
                     </td>
                 </tr>
                 {% end %}
@@ -82,7 +82,12 @@
             <tbody>
                 {% for run in tensorboards %}
                 <tr><td>
-                    <div><b>Link:</b> {{ format_tb_link(run['port']) }}</div>
+                    <div class="header clearfix">
+                    <div class="float-left">
+                        <b>Link:</b> {{ format_tb_link(run['port']) }}
+                    </div>
+                    <div class="float-right"><a href="javascript:;" onClick="termTensorboard(this);" data-index="{{ run['index'] }}">Terminate</a></div>
+                    </div>
                     <div><b>Log Dirs:</b> {{ format_kv(run['logdirs']) }}</div>
                 </td></tr>
                 {% end %}

@@ -32,6 +32,8 @@ def main():
     train_run = Run(expr=expr, run_name='train1' + str(time.time()), command='jac-run xxx', args='{xxx}', configs='{xxx}', highlight_args='{yyy}', highlight_configs='{yyy}')
     test_run = Run(expr=expr, run_name='test1'+  str(time.time()), command='jac-run xxx', args='{xxx}', configs='{xxx}', highlight_args='{yyy}', highlight_configs='{yyy}', refer=train_run)
 
+    from IPython import embed;  embed()
+
     train_run.save()
     test_run.save()
 

@@ -23,13 +23,16 @@ def format_kv(handler, kvs):
 
 
 @allow_custom_ui_method
-def format_kv_inline(handler, kvs):
+def format_kv_inline(handler, kvs, html=True):
     if kvs is None or kvs == '':
-        return 'N/A'
+        return '<code>N/A</code>'
     if not isinstance(kvs, dict):
         kvs = json.loads(kvs)
     kvs = {k: kvs[k] for k in sorted(kvs.keys())}
-    return '<code>' + '; '.join(['{}={}'.format(k, '{:.4f}'.format(v) if isinstance(v, (int, float)) else v) for k, v in kvs.items()]) + '</code>'
+    ret = '; '.join(['{}={}'.format(k, '{:.4f}'.format(v) if isinstance(v, (int, float)) else v) for k, v in kvs.items()])
+    if html:
+        return '<code>' + ret + '</code>'
+    return ret
 
 
 @allow_custom_ui_method

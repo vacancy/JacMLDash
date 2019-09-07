@@ -18,6 +18,8 @@ class ModelWithCUTime(peewee.Model):
     update_time = peewee.DateTimeField("%Y-%m-%d %H:%M:%S", default=datetime.now)
 
     def save(self, *args, **kwargs):
+        if self.get_id() is None:
+            self.create_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         return super().save(*args, **kwargs)
 
@@ -25,8 +27,8 @@ class ModelWithCUTime(peewee.Model):
 @register_model
 class Desc(ModelWithCUTime):
     desc_name = peewee.CharField(unique=True)
-    desc_description = peewee.TextField(null=True)
-    desc_notes = peewee.TextField(null=True)
+    desc_description = peewee.TextField(default='')
+    desc_notes = peewee.TextField(default='')
     metrics = peewee.TextField(null=True)
 
 
@@ -34,8 +36,8 @@ class Desc(ModelWithCUTime):
 class Experiment(ModelWithCUTime):
     desc = peewee.ForeignKeyField(Desc, backref='exprs')
     expr_name = peewee.CharField()
-    expr_description = peewee.TextField(null=True)
-    expr_notes = peewee.TextField(null=True)
+    expr_description = peewee.TextField(default='')
+    expr_notes = peewee.TextField(default='')
     metrics = peewee.TextField(null=True)
 
     class Meta:
@@ -46,8 +48,8 @@ class Experiment(ModelWithCUTime):
 class Run(ModelWithCUTime):
     expr = peewee.ForeignKeyField(Experiment, backref='runs')
     run_name = peewee.CharField(index=True)
-    run_description = peewee.TextField(null=True)
-    run_notes = peewee.TextField(null=True)
+    run_description = peewee.TextField(default='')
+    run_notes = peewee.TextField(default='')
 
     command = peewee.TextField()
     args = peewee.TextField()

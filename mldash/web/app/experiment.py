@@ -59,3 +59,30 @@ class RunHandler(JacRequestHandler):
             return
 
         self.render('run.html', run=run, expr=expr, desc=desc)
+
+
+@route(r'.*/update/text')
+class UpdateTextHandler(JacRequestHandler):
+    def get(self):
+        def get():
+            desc_name = self.get_argument('desc', '')
+            desc = Desc.get_or_none(desc_name=desc_name)
+            if desc is None:
+                return None
+
+            expr_name = self.get_argument('expr', '')
+            expr = Experiment.get_or_none(desc=desc, expr_name=expr_name)
+            if expr is None:
+                return desc
+
+            run_name  = self.get_argument('run', '')
+            run = Run.get_or_none(expr=expr, run_name=run_name)
+            if run is None:
+                return expr
+
+            return run
+
+        record = get()
+        setattr(record, self.get_argument('key'), self.get_argument('value'))
+        record.save()
+

@@ -10,10 +10,10 @@
 
 <div class="experiment">
     <dl class="row">
-        <dt>Desc Description</dt>
-        <dd>{{ desc.desc_description }}</dd>
-        <dt>Desc Notes</dt>
-        <dd>{{ desc.desc_notes }}</dd>
+        <dt>Desc Description <a href="javascript:;" onClick="updateText(this)" id="edit-desc-link" data-desc="{{ desc.desc_name }}" data-key="desc_description" data-preid="edit-desc">Edit</a></dt>
+        <dd><pre id="edit-desc">{{ desc.desc_description }}</pre></dd>
+        <dt>Desc Notes <a href="javascript:;" onClick="updateText(this)" id="edit-note-link" data-desc="{{ desc.desc_name }}" data-key="desc_notes" data-preid="edit-note">Edit</a></dt>
+        <dd><pre id="edit-note">{{ desc.desc_notes }}</pre></dd>
         <dt>Metrics</dt>
         <dd>{{ format_kv(desc.metrics) }}</dd>
     </dl>
@@ -31,7 +31,7 @@
                             (<b>Created:</b> {{ expr.create_time }}; <b>Updated</b>: {{ expr.update_time }})
                         </div>
                         <div><b>Metrics:</b> {{ format_kv_inline(expr.metrics) }}</div>
-                        <div><b>Description:</b> <span>{{ expr.expr_description }}</span></div>
+                        <div><b>Description:</b> <span class="inline-pre">{{ expr.expr_description }}</span></div>
                     </td></tr>
                     {% end %}
             </tbody>

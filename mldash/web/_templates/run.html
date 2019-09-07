@@ -12,10 +12,10 @@
 
 <div class="experiment">
     <dl class="row">
-        <dt>Run Description</dt>
-        <dd>{{ run.run_description }}</dd>
-        <dt>Run Notes</dt>
-        <dd>{{ run.run_notes }}</dd>
+        <dt>Run Description <a href="javascript:;" onClick="updateText(this)" id="edit-desc-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-key="run_description" data-preid="edit-desc">Edit</a></dt>
+        <dd><pre id="edit-desc">{{ run.run_description }}</pre></dd>
+        <dt>Run Notes <a href="javascript:;" onClick="updateText(this)" id="edit-note-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-key="run_notes" data-preid="edit-note">Edit</a></dt>
+        <dd><pre id="edit-note">{{ run.run_notes }}</pre></dd>
         <dt>Create Time</dt>
         <dd>{{ run.create_time }}</dd>
         <dt>Update Time</dt>
