@@ -62,7 +62,7 @@ def main():
     })
     app.listen(args.port, xheaders=True)
 
-    logger.critical('Mainloop started.')
+    logger.critical('Mainloop started. Port: {}.'.format(args.port))
     loop = tornado.ioloop.IOLoop.current()
     loop.start()
 
