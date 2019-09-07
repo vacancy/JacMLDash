@@ -16,7 +16,7 @@ from .config import allow_custom_ui_method
 @allow_custom_ui_method
 def format_kv(handler, kvs):
     if kvs is None or kvs == '':
-        return '<pre></pre>'
+        return '<pre>N/A</pre>'
     if not isinstance(kvs, dict):
         kvs = json.loads(kvs)
     return '<pre>' + kvformat(kvs) + '</pre>'
@@ -25,7 +25,7 @@ def format_kv(handler, kvs):
 @allow_custom_ui_method
 def format_kv_inline(handler, kvs):
     if kvs is None or kvs == '':
-        return ''
+        return 'N/A'
     if not isinstance(kvs, dict):
         kvs = json.loads(kvs)
     kvs = {k: kvs[k] for k in sorted(kvs.keys())}

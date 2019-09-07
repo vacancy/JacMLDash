@@ -8,25 +8,27 @@
     <title>{{ title }}</title>
     <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
     <link href="static/css/dashboard.css" rel="stylesheet">
     <link href="static/css/nested-list.css" rel="stylesheet">
+<style>
+</style>
 </head>
 <body>
-
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">{{ title }}</a>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search is not available" aria-label="Search">
-    <ul class="navbar-nav px-3">
-        <!-- <li class="nav-item text-nowrap"><a class="nav-link" href="#">Sign out</a></li> -->
-    </ul>
-</nav>
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-9 col-sm-3 col-md-2 mr-0" href="#">{{ title }}</a>
+        <!--ul class="navbar-nav px-3 d-md-none d-block">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">Sign out</a>
+            </li>
+        </ul-->
+        <input class="form-control form-control-dark w-100 mr-0 mr-md-1" type="text" placeholder="Search" aria-label="Search">
+    </nav>
 
 <div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+    <div class="w-100">
+        <nav class="col-xs-12 col-md-2 bg-light sidebar">
             <div class="sidebar-sticky">
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 text-muted">Metainfo</h6>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mt-md-2 text-muted">Metainfo</h6>
                 <div class="nav flex-column px-3 metainfo">
                     {% for key, value in metainfo.items() %}
                     <div>
@@ -50,7 +52,7 @@
             </div>
         </nav>
 
-        <main role="main" id="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <main role="main" id="main" class="col-xs-12 col-md-10 ml-sm-auto px-0 pl-md-1 mx-0">
         </main>
     </div>
 </div>

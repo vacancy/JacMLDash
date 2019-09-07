@@ -1,13 +1,13 @@
 {% autoescape None %}
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#desc/{{ desc.desc_name }}" onClick="loadPage(this)">{{ desc.desc_name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ expr.expr_name }}</li>
         </ol>
     </nav>
-<!--     <div class="btn-toolbar mb-2 mb-md-0">
+    <!-- <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
