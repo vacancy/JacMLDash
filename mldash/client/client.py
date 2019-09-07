@@ -34,7 +34,7 @@ class MLDashClient(object):
 
         if args is not None:
             run.args = io.dumps_json(args.__dict__)
-            if highlight_args is not None:
+            if highlight_args is not None and hasattr(highlight_args, 'highlight_args'):
                 run.highlight_args = io.dumps_json(get_highlight_args(args, highlight_args))
 
         run.configs = ''
@@ -55,6 +55,11 @@ class MLDashClient(object):
         for k, v in kwargs.items():
             if v is not None:
                 setattr(self.run, k, v)
+        self.run.save()
+
+    def update_parent(self, parent, is_master=False):
+        self.run.is_master = is_master
+        self.run.refer = Run.get_or_none(expr=self.expr, run_name=parent)
         self.run.save()
 
     def _log_metric_inner(self, key, value, target, update_func=None):

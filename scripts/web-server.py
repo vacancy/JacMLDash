@@ -26,6 +26,7 @@ parser = JacArgumentParser()
 parser.add_argument('--logdir', required=True)
 parser.add_argument('--port', type=int, default=8081)
 parser.add_argument('--debug', action='store_true')
+parser.add_argument('--cli', action='store_true')
 args = parser.parse_args()
 
 
@@ -39,6 +40,10 @@ def main():
         config = load_source(py_filename)
         if hasattr(config, 'ui_methods'):
             register_ui_methods(config.ui_methods)
+
+    if args.cli:
+        from IPython import embed; embed()
+        return
 
     app = make_app([
         'mldash.web.app.index',
