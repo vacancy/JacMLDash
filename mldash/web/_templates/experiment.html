@@ -40,32 +40,38 @@
                     <th>
                         <div class="header clearfix">
                             <h5 class="float-left">Runs</h5>
-                            <div class="float-right"><a href="javascript:;" onClick="runTensorboard(this)">Tensorboard</a></div>
+                            <div class="float-right">
+                                <a href="javascript:;" onClick="runTensorboard(this)">Tensorboard</a> /
+                                <a href="javascript:;" onClick="deleteRuns(this)">Delete</a>
+                            </div>
                         </div>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {% for run in expr.runs %}
-                {% if run.is_master %}
+                {% if run.is_master and not is_deleted(run) %}
                 <tr>
-                    <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-highlight="{{ format_kv_inline(run.highlight_args, html=False) }}">
-                        <div class="header clearfix">
-                        <div class="float-left"><b>Run:</b>
-                            <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link">{{ run.run_name }}</a>
-                            (<b>Created:</b> {{ run.create_time }}; <b>Updated</b>: {{ run.update_time }})
+                    <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-highlight="{{ format_kv_inline_tb(run.highlight_args) }}">
+                        <div class="d-flex">
+                        <div class="mr-2"><input type="checkbox" /></div>
+                        <div class="">
+                            <div>
+                                <b>Run:</b>
+                                <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link">{{ run.run_name }}</a>
+                                (<b>Created:</b> {{ run.create_time }}; <b>Updated</b>: {{ run.update_time }})
+                            </div>
+                            <div><b>Metrics:</b> {{ format_kv_inline(run.metrics) }}</div>
+                            <div><b>Command:</b> <code>{{ run.command }}</code></div>
+                            <div><b>Highlight args:</b> {{ format_kv_inline(run.highlight_args) }}</div>
+                            <div><b>Highlight configs:</b> {{ format_kv_inline(run.highlight_configs) }}</div>
+                            {% if run.refer is not None %}
+                            <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
+                            {% end %}
+                            <div><b>Description:</b> <span class="inline-pre">{{ run.run_description }}</span></div>
                         </div>
-                        <div class="float-right">TB <input type="checkbox" /></div>
                         </div>
 
-                        <div><b>Metrics:</b> {{ format_kv_inline(run.metrics) }}</div>
-                        <div><b>Command:</b> <code>{{ run.command }}</code></div>
-                        <div><b>Highlight args:</b> {{ format_kv_inline(run.highlight_args) }}</div>
-                        <div><b>Highlight configs:</b> {{ format_kv_inline(run.highlight_configs) }}</div>
-                        {% if run.refer is not None %}
-                        <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
-                        {% end %}
-                        <div><b>Description:</b> <span class="inline-pre">{{ run.run_description }}</span></div>
                     </td>
                 </tr>
                 {% end %}

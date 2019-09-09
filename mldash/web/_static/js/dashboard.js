@@ -115,3 +115,23 @@ function finUpdateText(elem) {
     link.show();
 }
 
+function deleteRuns(elem) {
+    var elem = $(elem);
+    var runs = $(".run-row");
+    var trash_runs = [];
+    for (var i = 0; i < runs.length; i++) {
+        let r = $(runs[i]);
+        if ($("input[type='checkbox']", r).prop("checked")) {
+            trash_runs.push({
+                desc: $(r).data("desc"),
+                expr: $(r).data("expr"),
+                run: $(r).data("run")
+            });
+        }
+    }
+
+    $.get('trashbin/delete', { spec: JSON.stringify(trash_runs) }, function() {
+        loadHash();
+    });
+}
+

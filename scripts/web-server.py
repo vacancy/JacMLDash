@@ -48,7 +48,8 @@ def main():
     app = make_app([
         'mldash.web.app.index',
         'mldash.web.app.experiment',
-        'mldash.plugins.tensorboard.handler'
+        'mldash.plugins.tensorboard.handler',
+        'mldash.plugins.trashbin.handler'
     ], {
         'gzip': True,
         'debug': args.debug,

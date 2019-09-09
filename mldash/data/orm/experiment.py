@@ -11,6 +11,7 @@
 from datetime import datetime
 import peewee
 from .database import register_model
+import jacinle.io as io
 
 
 class ModelWithCUTime(peewee.Model):
@@ -69,4 +70,18 @@ class Run(ModelWithCUTime):
 
     class Meta:
         indexes = [(('expr', 'run_name'), True)]
+
+    _extra_info_dict_cache = None
+
+    @property
+    def extra_info_dict(self):
+        if self._extra_info_dict_cache is None:
+            if self.extra_info is None or self.extra_info == '':
+                self._extra_info_dict_cache = dict()
+            else:
+                self._extra_info_dict_cache = io.loads_json(self.extra_info)
+        return self._extra_info_dict_cache
+
+    def update_extra_info(self):
+        self.extra_info = io.dumps_json(self.extra_info_dict)
 
