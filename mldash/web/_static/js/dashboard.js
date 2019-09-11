@@ -25,18 +25,20 @@ function loadPageWithURI(anchor) {
         anchor = anchor.substr(0, index);
     }
 
+    function updateMain(data) {
+        $("#main").html(data);
+        var preURLs = $(".pre-url");
+        for (var i = 0; i < preURLs.length; i++) {
+            enablePreURL(preURLs[i]);
+        }
+    }
+
     if (run != null) {
-        $.get('run', { desc: desc, expr: expr, run: run }, function(data, status) {
-            $("#main").html(data);
-        });
+        $.get('run', { desc: desc, expr: expr, run: run }, updateMain);
     } else if (expr != null) {
-        $.get('expr', { desc: desc, expr: expr }, function(data, status) {
-            $("#main").html(data);
-        });
+        $.get('expr', { desc: desc, expr: expr }, updateMain);
     } else if (desc != null) {
-        $.get('desc', { desc: desc }, function(data, status) {
-            $("#main").html(data);
-        });
+        $.get('desc', { desc: desc }, updateMain);
     }
 }
 
@@ -82,12 +84,53 @@ function termTensorboard(elem) {
     });
 }
 
+function deleteRuns(elem) {
+    var elem = $(elem);
+    var runs = $(".run-row");
+    var trash_runs = [];
+    for (var i = 0; i < runs.length; i++) {
+        let r = $(runs[i]);
+        if ($("input[type='checkbox']", r).prop("checked")) {
+            trash_runs.push({
+                desc: $(r).data("desc"),
+                expr: $(r).data("expr"),
+                run: $(r).data("run")
+            });
+        }
+    }
+
+    $.get('trashbin/delete', { spec: JSON.stringify(trash_runs) }, function() {
+        loadHash();
+    });
+}
+
+URLRegex = /((?:https?:\/\/)[^\s]*)/g;
+
+function enablePreURL(elem) {
+    var elem = $(elem);
+
+    var html = elem.data("raw");
+    if (!html) {
+        html = elem.html();
+    }
+    if (html) {
+        elem.data("raw", html);
+        elem.html(html.replace(URLRegex, '<a target="_blank" href="$1">$1</a>'));
+    }
+}
+
 function updateText(elem) {
     var elem = $(elem);
     var pre = $("#" + elem.data("preid"));
     var cont = $("#" + elem.data("preid")).parent();
+
+    html = pre.data("raw");
+    if (!html) {
+        html = pre.html();
+    }
+
     $(elem).hide(function() {
-        cont.html($('<div class="py-1"><textarea class="form-control" id="' + elem.data("preid") + '-editor">' + pre.html() + '</textarea>' +
+        cont.html($('<div class="py-1"><textarea class="form-control" id="' + elem.data("preid") + '-editor">' + html + '</textarea>' +
             '<a href="javascript:;" onClick="finUpdateText(this)" data-preid="' + elem.data("preid") + '">Save</a></div>'));
         var text = $("#" + elem.data("preid") + "-editor");
         text.focus();
@@ -111,27 +154,11 @@ function finUpdateText(elem) {
         $.get("desc/update/text", {key: link.data("key"), value: text.val(), desc: desc});
     }
 
-    cont.html('<pre id="' + elem.data("preid") + '">' + text.val() + '</pre>');
+    cont.html('<pre class="pre-url" id="' + elem.data("preid") + '">' + text.val() + '</pre>');
+
+    var pre = $("#" + elem.data("preid"));
+    enablePreURL(pre);
+
     link.show();
-}
-
-function deleteRuns(elem) {
-    var elem = $(elem);
-    var runs = $(".run-row");
-    var trash_runs = [];
-    for (var i = 0; i < runs.length; i++) {
-        let r = $(runs[i]);
-        if ($("input[type='checkbox']", r).prop("checked")) {
-            trash_runs.push({
-                desc: $(r).data("desc"),
-                expr: $(r).data("expr"),
-                run: $(r).data("run")
-            });
-        }
-    }
-
-    $.get('trashbin/delete', { spec: JSON.stringify(trash_runs) }, function() {
-        loadHash();
-    });
 }
 

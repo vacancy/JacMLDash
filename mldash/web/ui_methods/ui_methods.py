@@ -32,9 +32,19 @@ def format_kv_inline(handler, kvs, html=True):
     if not isinstance(kvs, dict):
         kvs = json.loads(kvs)
     kvs = {k: kvs[k] for k in sorted(kvs.keys())}
-    ret = '; '.join(['{}={}'.format(k, '{:.6f}'.format(v) if isinstance(v, (int, float)) else v) for k, v in kvs.items()])
+    ret = '; '.join(['{}={}'.format(k, '{:.6f}'.format(v) if isinstance(v, (float)) else v) for k, v in kvs.items()])
     if html:
         return '<code>' + ret + '</code>'
+    return ret
+
+
+def format_kv_inline_tb(handler, kvs):
+    if kvs is None or kvs == '':
+        return ''
+    if not isinstance(kvs, dict):
+        kvs = json.loads(kvs)
+    kvs = {k: kvs[k] for k in sorted(kvs.keys())}
+    ret = '_'.join(['{} = {}'.format(k, '{:.6f}'.format(v) if isinstance(v, (float)) else v) for k, v in kvs.items()])
     return ret
 
 
@@ -60,14 +70,4 @@ def format_tb_link(handler, port):
 def is_deleted(handler, run):
     from mldash.plugins.trashbin import is_trash
     return is_trash(run)
-
-
-def format_kv_inline_tb(handler, kvs):
-    if kvs is None or kvs == '':
-        return ''
-    if not isinstance(kvs, dict):
-        kvs = json.loads(kvs)
-    kvs = {k: kvs[k] for k in sorted(kvs.keys())}
-    ret = '_'.join(['{} = {}'.format(k, '{:.6f}'.format(v) if isinstance(v, (int, float)) else v) for k, v in kvs.items()])
-    return ret
 

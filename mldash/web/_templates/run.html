@@ -13,9 +13,9 @@
 <div class="experiment">
     <dl class="row">
         <dt>Run Description <a href="javascript:;" onClick="updateText(this)" id="edit-desc-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-key="run_description" data-preid="edit-desc">Edit</a></dt>
-        <dd><pre id="edit-desc">{{ run.run_description }}</pre></dd>
+        <dd><pre class="pre-url" id="edit-desc">{{ run.run_description }}</pre></dd>
         <dt>Run Notes <a href="javascript:;" onClick="updateText(this)" id="edit-note-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-key="run_notes" data-preid="edit-note">Edit</a></dt>
-        <dd><pre id="edit-note">{{ run.run_notes }}</pre></dd>
+        <dd><pre class="pre-url" id="edit-note">{{ run.run_notes }}</pre></dd>
         <dt>Create Time</dt>
         <dd>{{ run.create_time }}</dd>
         <dt>Update Time</dt>
@@ -23,7 +23,7 @@
 
         {% if run.refer is not None %}
         <dt>Parent</dt>
-        <dd>{{ run.refer.run_name }}
+        <dd>
         <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.refer.run_name }}">{{ run.refer.run_name }}</a>
         </dd>
         {% end %}
@@ -69,7 +69,7 @@
                         {% if rrun.refer is not None %}
                         <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ rrun.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ rrun.refer.run_name }}</a></span></div>
                         {% end %}
-                        <div><b>Description:</b> <span>{{ rrun.run_description }}</span></div>
+                        <div><b>Description:</b> <span class="inline-pre pre-url">{{ rrun.run_description }}</span></div>
                     </td>
                 </tr>
                 {% end %}
@@ -78,3 +78,4 @@
     </div>
     {% end %}
 </div>
+
