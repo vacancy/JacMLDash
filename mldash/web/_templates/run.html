@@ -12,6 +12,12 @@
 
 <div class="experiment">
     <dl class="row">
+        <dt>Customized Commands</dt>
+        <dd>
+            {% for cmd in run_methods %}
+            <a href="javascript:;" onClick="runCustomizedCommand(this)" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-cmd="{{ cmd.__name__ }}">{{cmd.command_name}}</a>
+            {% end %}
+        </dd>
         <dt>Run Description <a href="javascript:;" onClick="updateText(this)" id="edit-desc-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-key="run_description" data-preid="edit-desc">Edit</a></dt>
         <dd><pre class="pre-url" id="edit-desc">{{ run.run_description }}</pre></dd>
         <dt>Run Notes <a href="javascript:;" onClick="updateText(this)" id="edit-note-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-key="run_notes" data-preid="edit-note">Edit</a></dt>
@@ -65,6 +71,7 @@
             </thead>
             <tbody>
                 {% for rrun in run.referee %}
+                {% if not is_deleted(rrun) %}
                 <tr>
                     <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ rrun.run_name }}" data-highlight="{{ format_kv_inline_tb(rrun.highlight_args) }}">
                         <div class="d-flex">
@@ -83,6 +90,7 @@
                         </div>
                     </td>
                 </tr>
+                {% end %}
                 {% end %}
             </tbody>
         </table>

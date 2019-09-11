@@ -11,6 +11,7 @@
 from jacweb.web import route, JacRequestHandler
 from mldash.data.orm import init_database, Desc, Experiment, Run
 from mldash.plugins.tensorboard.manager import tensorboard_manager
+from mldash.web.run_methods import get_run_methods
 
 
 @route(r'/desc')
@@ -64,7 +65,7 @@ class RunHandler(JacRequestHandler):
         if run is None:
             return
 
-        self.render('run.html', run=run, expr=expr, desc=desc)
+        self.render('run.html', run=run, expr=expr, desc=desc, run_methods=get_run_methods())
 
 
 @route(r'.*/update/text')
@@ -91,4 +92,48 @@ class UpdateTextHandler(JacRequestHandler):
         record = get()
         setattr(record, self.get_argument('key'), self.get_argument('value'))
         record.save()
+
+
+@route(r'/runcmd')
+class RunHandler(JacRequestHandler):
+    def get(self):
+        desc_name = self.get_argument('desc', '')
+        desc = Desc.get_or_none(desc_name=desc_name)
+        if desc is None:
+            return
+
+        expr_name = self.get_argument('expr', '')
+        expr = Experiment.get_or_none(desc=desc, expr_name=expr_name)
+        if expr is None:
+            return
+
+        run_name  = self.get_argument('run', '')
+        run = Run.get_or_none(expr=expr, run_name=run_name)
+        if run is None:
+            return
+
+        run_methods = get_run_methods()
+        cmd_name = self.get_argument('cmd', '')
+        method = None
+        for m in run_methods:
+            if m.__name__ == cmd_name:
+                method = m
+
+        if method is None:
+            return
+
+        import multiprocessing
+        import sys
+        self.write('<pre>')
+        self.flush()
+        sys.stdout = self
+        sys.stderr = self
+        proc = multiprocessing.Process(target=method, args=(run, ))
+        proc.start()
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+        proc.join()
+        self.write('</pre>')
+        self.flush()
+        self.finish()
 

@@ -162,3 +162,13 @@ function finUpdateText(elem) {
     link.show();
 }
 
+function runCustomizedCommand(elem) {
+    elem = $(elem);
+    desc = elem.data("desc");
+    expr = elem.data("expr");
+    run = elem.data("run");
+    cmd = elem.data("cmd");
+
+    window.open("/runcmd?desc=" + desc + "&expr=" + expr + "&run=" + run + "&cmd=" + cmd, "_blank");
+}
+

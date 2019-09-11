@@ -17,6 +17,7 @@ from jacweb.web import make_app
 from mldash.data.orm import init_database, init_project, ProjectMetainfo, Desc, Experiment, Run
 from mldash.web.path import get_static_path, get_template_path
 from mldash.web.ui_methods import get_ui_methods, register_ui_methods
+from mldash.web.run_methods import register_run_methods
 
 import tornado.ioloop
 
@@ -40,6 +41,8 @@ def main():
         config = load_source(py_filename)
         if hasattr(config, 'ui_methods'):
             register_ui_methods(config.ui_methods)
+        if hasattr(config, 'run_methods'):
+            register_run_methods(config.run_methods)
 
     if args.cli:
         from IPython import embed; embed()
