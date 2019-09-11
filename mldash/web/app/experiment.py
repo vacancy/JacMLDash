@@ -17,11 +17,17 @@ from mldash.plugins.tensorboard.manager import tensorboard_manager
 class DescHandler(JacRequestHandler):
     def get(self):
         desc_name = self.get_argument('desc', '')
+
+        if desc_name == '__all__':
+            descs = Desc.select().execute()
+            self.render('desc_all.html', descs=descs, tensorboards=tensorboard_manager.get_running_tensorboards())
+            return
+
         desc = Desc.get_or_none(desc_name=desc_name)
         if desc is None:
             return
 
-        self.render('desc.html', desc=desc)
+        self.render('desc.html', desc=desc, tensorboards=tensorboard_manager.get_running_tensorboards(desc_name))
 
 
 @route(r'/expr')

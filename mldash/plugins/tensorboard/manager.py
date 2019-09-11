@@ -11,8 +11,10 @@
 import os
 import subprocess
 import collections
-import socket, errno
+import socket
+import errno
 import atexit
+import threading
 
 from mldash.data.orm import Desc, Experiment, Run
 
@@ -41,12 +43,14 @@ def find_port(start=6006, max_tries=40):
 class TensorboardManager(object):
     def __init__(self):
         self.running_tensorboards = list()
+        self.mutex = threading.Lock()
         self.index = 0
         atexit.register(self._kill_all)
 
     def start(self, specs):
         logdirs = dict()
         exprs = set()
+        descs = set()
         for spec in specs:
             desc = Desc.get_or_none(desc_name=spec['desc'])
             if desc is None:
@@ -63,6 +67,7 @@ class TensorboardManager(object):
             value = run.tb_dir
             if value is not None and value != '':
                 logdirs[key] = value
+            descs.add(spec['desc'])
             exprs.add((spec['desc'], spec['expr']))
 
         if len(logdirs) == 0:
@@ -75,25 +80,32 @@ class TensorboardManager(object):
             ['tensorboard', '--logdir', logdirs_string, '--port', str(port)],
             stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w')
         )
-        record = dict(index=self.index, logdirs=logdirs, logdirs_string=logdirs_string, exprs=exprs, port=port, process=process)
+        record = dict(index=self.index, logdirs=logdirs, logdirs_string=logdirs_string, descs=descs, exprs=exprs, port=port, process=process)
 
         self.index += 1
-        self.running_tensorboards.append(record)
+        with self.mutex:
+            self.running_tensorboards.append(record)
         return record
 
     def terminate(self, index):
-        found = None
-        for x in self.running_tensorboards:
-            if x['index'] == index:
-                found = x
-                break
-        if found is not None:
-            found['process'].terminate()
-            self.running_tensorboards.remove(found)
+        with self.mutex:
+            found = None
+            for x in self.running_tensorboards:
+                if x['index'] == index:
+                    found = x
+                    break
+            if found is not None:
+                found['process'].terminate()
+                self.running_tensorboards.remove(found)
 
-    def get_running_tensorboards(self, desc_name, expr_name):
-        self._clean_up_running_tensorboards()
-        return [x for x in self.running_tensorboards if (desc_name, expr_name) in x['exprs']]
+    def get_running_tensorboards(self, desc_name=None, expr_name=None):
+        with self.mutex:
+            self._clean_up_running_tensorboards()
+            if desc_name is None:
+                return self.running_tensorboards
+            if expr_name is None:
+                return [x for x in self.running_tensorboards if desc_name in x['descs']]
+            return [x for x in self.running_tensorboards if (desc_name, expr_name) in x['exprs']]
 
     def _clean_up_running_tensorboards(self):
         self.running_tensorboards = [x for x in self.running_tensorboards if x['process'].poll() is None]

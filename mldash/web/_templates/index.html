@@ -38,6 +38,7 @@
                 </div>
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 text-muted">Experiments</h6>
                 <div class="list-group list-group-root card">
+                    <a href="#desc/__all__" class="list-group-item desc-link">--All Descriptions--</a>
                     {% for desc in descs %}
                     <a href="#desc/{{ desc.desc_name }}" class="list-group-item desc-link">
                         {{ desc.desc_name }}

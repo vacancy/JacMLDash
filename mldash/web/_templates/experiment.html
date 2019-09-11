@@ -54,24 +54,23 @@
                 <tr>
                     <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-highlight="{{ format_kv_inline_tb(run.highlight_args) }}">
                         <div class="d-flex">
-                        <div class="mr-2"><input type="checkbox" /></div>
-                        <div class="">
+                            <div class="mr-2"><input type="checkbox" /></div>
                             <div>
-                                <b>Run:</b>
-                                <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link">{{ run.run_name }}</a>
-                                (<b>Created:</b> {{ run.create_time }}; <b>Updated</b>: {{ run.update_time }})
+                                <div>
+                                    <b>Run:</b>
+                                    <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link">{{ run.run_name }}</a>
+                                    (<b>Created:</b> {{ run.create_time }}; <b>Updated</b>: {{ run.update_time }})
+                                </div>
+                                <div><b>Metrics:</b> {{ format_kv_inline(run.metrics) }}</div>
+                                <div><b>Command:</b> <code>{{ run.command }}</code></div>
+                                <div><b>Highlight args:</b> {{ format_kv_inline(run.highlight_args) }}</div>
+                                <div><b>Highlight configs:</b> {{ format_kv_inline(run.highlight_configs) }}</div>
+                                {% if run.refer is not None %}
+                                <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
+                                {% end %}
+                                <div><b>Description:</b> <span class="inline-pre pre-url">{{ run.run_description }}</span></div>
                             </div>
-                            <div><b>Metrics:</b> {{ format_kv_inline(run.metrics) }}</div>
-                            <div><b>Command:</b> <code>{{ run.command }}</code></div>
-                            <div><b>Highlight args:</b> {{ format_kv_inline(run.highlight_args) }}</div>
-                            <div><b>Highlight configs:</b> {{ format_kv_inline(run.highlight_configs) }}</div>
-                            {% if run.refer is not None %}
-                            <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
-                            {% end %}
-                            <div><b>Description:</b> <span class="inline-pre pre-url">{{ run.run_description }}</span></div>
                         </div>
-                        </div>
-
                     </td>
                 </tr>
                 {% end %}
