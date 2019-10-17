@@ -23,6 +23,11 @@ class MLDashClient(object):
         self.expr = None
         self.run = None
 
+    def _refresh(self):
+        self.desc = Desc.get_by_id(self.desc.get_id())
+        self.expr = Experiment.get_by_id(self.expr.get_id())
+        self.run = Run.get_by_id(self.run.get_id())
+
     def init(self, desc_name, expr_name, run_name, args=None, highlight_args=None, configs=None):
         init_project()
         desc, _ = Desc.get_or_create(desc_name=desc_name)
@@ -52,12 +57,14 @@ class MLDashClient(object):
         self.run = run
 
     def update(self, **kwargs):
+        self._refresh()
         for k, v in kwargs.items():
             if v is not None:
                 setattr(self.run, k, v)
         self.run.save()
 
     def update_parent(self, parent, is_master=False):
+        self._refresh()
         self.run.is_master = is_master
         self.run.refer = Run.get_or_none(expr=self.expr, run_name=parent)
         self.run.save()
@@ -78,6 +85,7 @@ class MLDashClient(object):
         target.save()
 
     def _log_metric_dist(self, key, value, desc, expr, update_func=None):
+        self._refresh()
         if desc: self._log_metric_inner(key, value, self.desc, update_func)
         if expr: self._log_metric_inner(key, value, self.expr, update_func)
         self._log_metric_inner(key, value, self.run, update_func)
