@@ -9,7 +9,7 @@
 # Distributed under terms of the MIT license.
 
 import json
-from jacinle.utils.printing import kvformat
+from jacinle.utils.printing import kvformat, stformat
 from .config import allow_custom_ui_method
 
 
@@ -20,6 +20,15 @@ def format_kv(handler, kvs):
     if not isinstance(kvs, dict):
         kvs = json.loads(kvs)
     return '<pre>' + kvformat(kvs) + '</pre>'
+
+
+@allow_custom_ui_method
+def format_kv_recursive(handler, kvs):
+    if kvs is None or kvs == '':
+        return '<pre>N/A</pre>'
+    if not isinstance(kvs, dict):
+        kvs = json.loads(kvs)
+    return '<div class="inline-pre">' + stformat(kvs, indent_format='&nbsp;&nbsp;', end_format='<br />') + '</div>'
 
 
 @allow_custom_ui_method
