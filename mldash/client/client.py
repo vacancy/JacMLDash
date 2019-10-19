@@ -8,9 +8,10 @@
 # This file is part of JacMLDash.
 # Distributed under terms of the MIT license.
 
-from mldash.data.orm import init_database, init_project, Desc, Experiment, Run
 import sys
+import contextlib
 import jacinle.io as io
+from mldash.data.orm import init_database, init_project, Desc, Experiment, Run
 
 __all__ = ['MLDashClient']
 
@@ -56,6 +57,10 @@ class MLDashClient(object):
         self.expr = expr
         self.run = run
 
+    @property
+    def extra_info_dict(self):
+        return self.run.extra_info_dict
+
     def update(self, **kwargs):
         self._refresh()
         for k, v in kwargs.items():
@@ -67,6 +72,13 @@ class MLDashClient(object):
         self._refresh()
         self.run.is_master = is_master
         self.run.refer = Run.get_or_none(expr=self.expr, run_name=parent)
+        self.run.save()
+
+    @contextlib.contextmanager
+    def update_extra_info(self):
+        self._refresh()
+        yield
+        self.run.update_extra_info()
         self.run.save()
 
     def _log_metric_inner(self, key, value, target, update_func=None):

@@ -51,7 +51,7 @@
         <dt>TensorBoard Dir</dt>
         <dd><pre>{{ run.tb_dir }}</pre></dd>
         <dt>Extra Information</dt>
-        <dd><pre>{{ run.extra_info }}</pre></dd>
+        <dd>{{ format_kv(run.extra_info) }}</dd>
     </dl>
 
     {% if len(run.referee) > 0 %}
