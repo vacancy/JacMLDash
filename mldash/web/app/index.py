@@ -10,6 +10,7 @@
 
 from jacweb.web import route, JacRequestHandler
 from mldash.data.orm import init_database, ProjectMetainfo, Desc
+from mldash.web.custom_pages import get_custom_pages
 
 
 @route(r'/')
@@ -17,6 +18,6 @@ class IndexHandler(JacRequestHandler):
     def get(self):
         metainfo = ProjectMetainfo.get_all()
         descs = Desc.select().execute()
-        kwargs = {'metainfo': metainfo, 'title': metainfo['title'], 'descs': descs}
+        kwargs = {'metainfo': metainfo, 'title': metainfo['title'], 'descs': descs, 'custom_pages': get_custom_pages()}
         self.render('index.html', **kwargs)
 

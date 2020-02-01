@@ -50,6 +50,10 @@
         <dd>{{ format_log_fpath(run.meter_file) }}</dd>
         <dt>TensorBoard Dir</dt>
         <dd><pre>{{ run.tb_dir }}</pre></dd>
+        {% for k, v in format_extra_items(run).items() %}
+        <dt>{{ k }}</dt>
+        <dd>{{ v }}</dd>
+        {% end %}
         <dt>Extra Information</dt>
         <dd>{{ format_kv_recursive(run.extra_info) }}</dd>
     </dl>

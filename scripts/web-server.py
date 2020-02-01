@@ -18,6 +18,7 @@ from mldash.data.orm import init_database, init_project, ProjectMetainfo, Desc, 
 from mldash.web.path import get_static_path, get_template_path
 from mldash.web.ui_methods import get_ui_methods, register_ui_methods
 from mldash.web.run_methods import register_run_methods
+from mldash.web.custom_pages import register_custom_pages
 
 import tornado.ioloop
 
@@ -43,6 +44,8 @@ def main():
             register_ui_methods(config.ui_methods)
         if hasattr(config, 'run_methods'):
             register_run_methods(config.run_methods)
+        if hasattr(config, 'custom_pages'):
+            register_custom_pages(config.custom_pages)
 
     if args.cli:
         from IPython import embed; embed()

@@ -9,6 +9,8 @@ function loadPageWithURI(anchor) {
     var run = null;
     var expr = null;
     var desc = null;
+    var custom_page = null;
+
     if (anchor.indexOf('/run/') != -1) {
         index = anchor.indexOf('/run/');
         run = anchor.substr(index + 5);
@@ -25,6 +27,19 @@ function loadPageWithURI(anchor) {
         anchor = anchor.substr(0, index);
     }
 
+    if (anchor.indexOf('#custom/') != -1) {
+        index = anchor.indexOf('#custom/')
+        anchor = anchor.substr(index + 8);
+        index = anchor.indexOf('/');
+        if (index == -1) {
+            custom_page = anchor;
+            anchor = '';
+        } else {
+            custom_page = anchor.substr(0, index);
+            anchor = anchor.substr(index + 1);
+        }
+    }
+
     function updateMain(data) {
         $("#main").html(data);
         var preURLs = $(".pre-url");
@@ -33,7 +48,9 @@ function loadPageWithURI(anchor) {
         }
     }
 
-    if (run != null) {
+    if (custom_page != null) {
+        $.get('custom', { page: custom_page, anchor: anchor }, updateMain);
+    } else if (run != null) {
         $.get('run', { desc: desc, expr: expr, run: run }, updateMain);
     } else if (expr != null) {
         $.get('expr', { desc: desc, expr: expr }, updateMain);

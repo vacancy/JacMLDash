@@ -12,6 +12,7 @@ from jacweb.web import route, JacRequestHandler
 from mldash.data.orm import init_database, Desc, Experiment, Run
 from mldash.plugins.tensorboard.manager import tensorboard_manager
 from mldash.web.run_methods import get_run_methods
+from mldash.web.custom_pages import get_custom_pages
 
 
 @route(r'/desc')
@@ -136,4 +137,21 @@ class RunHandler(JacRequestHandler):
         self.write('</pre>')
         self.flush()
         self.finish()
+
+
+@route(r'/custom')
+class CustomPageHandler(JacRequestHandler):
+    def get(self):
+        custom_pages = get_custom_pages()
+        page_name = self.get_argument('page', '')
+
+        page = None
+        for p in custom_pages:
+            if p.__name__ == 'handle_' + page_name:
+                page = p
+
+        if page is None:
+            return
+
+        page(self)
 

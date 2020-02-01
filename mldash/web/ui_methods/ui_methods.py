@@ -76,6 +76,16 @@ def format_tb_link(handler, port):
     return '<a href="{link}" target="_blank">{link}</a>'.format(link=link)
 
 
+@allow_custom_ui_method
+def format_extra_items(handler, run):
+    return dict()
+
+
+@allow_custom_ui_method
+def format_extra_summary_items(handler, run):
+    return dict()
+
+
 def is_deleted(handler, run):
     from mldash.plugins.trashbin import is_trash
     return is_trash(run)

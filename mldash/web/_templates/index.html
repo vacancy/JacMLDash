@@ -21,7 +21,7 @@
                 <a class="nav-link" href="#">Sign out</a>
             </li>
         </ul-->
-        <input class="form-control form-control-dark w-100 mr-0 mr-md-1" type="text" placeholder="Search" aria-label="Search">
+        <input class="form-control form-control-dark w-100 mr-0 mr-md-1" type="text" placeholder="Search is not available." aria-label="Search">
     </nav>
 
 <div class="container-fluid">
@@ -36,6 +36,16 @@
                     </div>
                     {% end %}
                 </div>
+                {% if len(custom_pages) > 0 %}
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 text-muted">Custom Pages</h6>
+                <div class="list-group list-group-root card">
+                    {% for page in custom_pages %}
+                    <a href="#custom/{{ page.__name__[7:] }}" class="list-group-item desc-link">
+                        {{ page.page_name }}
+                    </a>
+                    {% end %}
+                </div>
+                {% end %}
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 text-muted">Experiments</h6>
                 <div class="list-group list-group-root card">
                     <a href="#desc/__all__" class="list-group-item desc-link">--All Descriptions--</a>
@@ -45,7 +55,7 @@
                     </a>
                     <div class="list-group" id="desc-{{ desc.desc_name }}">
                         {% for expr in desc.exprs.execute() %}
-                        <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}" class="list-group-item expr-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" onClick="loadPage(this)">{{ expr.expr_name }}</a>
+                        <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}" class="list-group-item expr-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}"">{{ expr.expr_name }}</a>
                         {% end %}
                     </div>
                     {% end %}

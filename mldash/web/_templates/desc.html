@@ -73,6 +73,9 @@
                             <div><b>Command:</b> <code>{{ run.command }}</code></div>
                             <div><b>Highlight args:</b> {{ format_kv_inline(run.highlight_args) }}</div>
                             <div><b>Highlight configs:</b> {{ format_kv_inline(run.highlight_configs) }}</div>
+                            {% for k, v in format_extra_summary_items(run).items() %}
+                            <div><b>{{ k }}:</b> {{ v }}</div>
+                            {% end %}
                             {% if run.refer is not None %}
                             <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
                             {% end %}
