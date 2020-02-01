@@ -7,6 +7,7 @@
     <meta name="author" content="Jiayuan Mao">
     <title>{{ title }}</title>
     <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="static/css/dashboard.css" rel="stylesheet">
     <link href="static/css/nested-list.css" rel="stylesheet">
@@ -21,7 +22,7 @@
                 <a class="nav-link" href="#">Sign out</a>
             </li>
         </ul-->
-        <input class="form-control form-control-dark w-100 mr-0 mr-md-1" type="text" placeholder="Search is not available." aria-label="Search">
+        <input id="search" class="form-control form-control-dark w-100 mr-0 mr-md-1" type="text" placeholder="Search" aria-label="Search">
     </nav>
 
 <div class="container-fluid">
@@ -68,6 +69,7 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
 <script src="static/js/dashboard.js"></script>
 <script>
@@ -82,6 +84,15 @@
 $(function() {
     loadHash();
     window.onhashchange = loadHash;
+    $.getJSON('api/search-list', function(results) {
+        $('#search').autocomplete({
+            source: results,
+            select: function(event, ui) {
+                var url = ui.item.value;
+                window.location.hash = url;
+            }
+        });
+    });
 });
 </script>
 </body>
