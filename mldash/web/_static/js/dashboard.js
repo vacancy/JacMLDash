@@ -121,6 +121,37 @@ function deleteRuns(elem) {
     });
 }
 
+function starRun(elem) {
+    var elem = $(elem);
+    var star_runs = [];
+    var r = elem.parent().parent().parent().parent();
+    console.log(r);
+    star_runs.push({
+        desc: $(r).data("desc"),
+        expr: $(r).data("expr"),
+        run: $(r).data("run")
+    });
+
+    $.get('star/star', { spec: JSON.stringify(star_runs) }, function() {
+        loadHash();
+    });
+}
+
+function unstarRun(elem) {
+    var elem = $(elem);
+    var unstar_runs = [];
+    var r = elem.parent().parent().parent().parent();
+    unstar_runs.push({
+        desc: $(r).data("desc"),
+        expr: $(r).data("expr"),
+        run: $(r).data("run")
+    });
+
+    $.get('star/unstar', { spec: JSON.stringify(unstar_runs) }, function() {
+        loadHash();
+    });
+}
+
 URLRegex = /((?:https?:\/\/)[^\s]*)/g;
 
 function enablePreURL(elem) {

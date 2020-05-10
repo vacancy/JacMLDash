@@ -3,13 +3,19 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">All Descriptions</li>
+            {% if star_only %}
+            <li class="breadcrumb-item active" aria-current="page">Stared Runs</li>
+            {% else %}
+            <li class="breadcrumb-item active" aria-current="page">Overview</li>
+            {% end %}
         </ol>
     </nav>
 </div>
 
 <div class="experiment">
     <div class="table-responsive">
+
+        {% if not star_only %}
         <table class="table table-striped table-bordered table-sm">
             <thead>
                 <tr><th><h5>Descs</h5></th></tr>
@@ -55,6 +61,8 @@
         </table>
     </div>
 
+    {% end %}
+
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm">
             <thead>
@@ -75,15 +83,20 @@
                 {% for expr in desc.exprs %}
                 {% for run in expr.runs %}
                 {% if run.is_master and not is_deleted(run) %}
+                {% if not star_only or is_stared(run) %}
                 <tr>
                     <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-highlight="{{ format_kv_inline_tb(run.highlight_args) }}">
                         <div class="d-flex">
-                        <div class="mr-2"><input type="checkbox" /></div>
+                        <div class="mr-2">
+                            <input type="checkbox" />
+                            {% if is_stared(run) %} <br /><i class="fa fa-star" style="color: #ffcc66;"></i> {% end %}
+                        </div>
                         <div class="">
                             <div>
                                 <b>Run:</b>
                                 <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link">{{ desc.desc_name }}/{{ expr.expr_name }}/{{ run.run_name }}</a>
                                 (<b>Created:</b> {{ run.create_time }}; <b>Updated</b>: {{ run.update_time }})
+                                {% if is_stared(run) %} <a href="javascript:;" onClick="unstarRun(this)">[Unstar]</a> {% else %} <a href="javascript:;" onClick="starRun(this)">[Star]</a> {% end %}
                             </div>
                             <div><b>Metrics:</b> {{ format_kv_inline(run.metrics) }}</div>
                             <div><b>Command:</b> <code>{{ run.command }}</code></div>
@@ -101,6 +114,7 @@
 
                     </td>
                 </tr>
+                {% end %}
                 {% end %}
                 {% end %}
                 {% end %}

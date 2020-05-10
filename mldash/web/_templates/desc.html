@@ -62,12 +62,16 @@
                 <tr>
                     <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-highlight="{{ format_kv_inline_tb(run.highlight_args) }}">
                         <div class="d-flex">
-                        <div class="mr-2"><input type="checkbox" /></div>
+                        <div class="mr-2">
+                            <input type="checkbox" />
+                            {% if is_stared(run) %} <br /><i class="fa fa-star" style="color: #ffcc66;"></i> {% end %}
+                        </div>
                         <div class="">
                             <div>
                                 <b>Run:</b>
                                 <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link">{{ expr.expr_name }} / {{ run.run_name }}</a>
                                 (<b>Created:</b> {{ run.create_time }}; <b>Updated</b>: {{ run.update_time }})
+                                {% if is_stared(run) %} <a href="javascript:;" onClick="unstarRun(this)">[Unstar]</a> {% else %} <a href="javascript:;" onClick="starRun(this)">[Star]</a> {% end %}
                             </div>
                             <div><b>Metrics:</b> {{ format_kv_inline(run.metrics) }}</div>
                             <div><b>Command:</b> <code>{{ run.command }}</code></div>

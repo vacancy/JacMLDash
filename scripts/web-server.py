@@ -55,7 +55,8 @@ def main():
         'mldash.web.app.index',
         'mldash.web.app.experiment',
         'mldash.plugins.tensorboard.handler',
-        'mldash.plugins.trashbin.handler'
+        'mldash.plugins.trashbin.handler',
+        'mldash.plugins.star.handler'
     ], {
         'gzip': True,
         'debug': args.debug,

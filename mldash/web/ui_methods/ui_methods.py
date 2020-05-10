@@ -100,3 +100,8 @@ def is_deleted(handler, run):
     from mldash.plugins.trashbin import is_trash
     return is_trash(run)
 
+
+def is_stared(handler, run):
+    from mldash.plugins.star import is_stared
+    return is_stared(run)
+
