@@ -43,7 +43,7 @@
         <dt>Args</dt>
         <dd>{{ format_kv(run.args) }}</dd>
         <dt>Configs</dt>
-        <dd>{{ format_kv(run.configs) }}</dd>
+        <dd>{{ format_kv_recursive_flat(run.configs) }}</dd>
         <dt>Metainfo File</dt>
         <dd>{{ format_log_fpath(run.metainfo_file) }}</dd>
         <dt>Log File</dt>

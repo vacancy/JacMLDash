@@ -10,6 +10,7 @@
 
 import json
 from jacinle.utils.printing import kvformat, stformat
+from jacinle.utils.meta import dict_deep_kv
 from .config import allow_custom_ui_method
 
 
@@ -20,6 +21,15 @@ def format_kv(handler, kvs):
     if not isinstance(kvs, dict):
         kvs = json.loads(kvs)
     return '<pre>' + kvformat(kvs) + '</pre>'
+
+
+@allow_custom_ui_method
+def format_kv_recursive_flat(handler, kvs):
+    if kvs is None or kvs == '':
+        return '<pre>N/A</pre>'
+    if not isinstance(kvs, dict):
+        kvs = json.loads(kvs)
+    return '<pre>' + kvformat({k: v for k, v in dict_deep_kv(kvs) if not '__' in k}) + '</pre>'
 
 
 @allow_custom_ui_method
