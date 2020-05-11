@@ -32,7 +32,7 @@
         {% if run.refer is not None %}
         <dt>Parent</dt>
         <dd>
-        <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.run_name }}" onClick="loadPage(this)" class="run-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.refer.run_name }}">{{ run.refer.run_name }}</a>
+        <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.refer.run_name }}">{{ run.refer.run_name }}</a>
         </dd>
         {% end %}
 
@@ -44,6 +44,10 @@
         <dd>{{ format_kv(run.args) }}</dd>
         <dt>Configs</dt>
         <dd>{{ format_kv_recursive_flat(run.configs) }}</dd>
+        {% for k, v in format_extra_items(run).items() %}
+        <dt>{{ k }}</dt>
+        <dd>{{ v }}</dd>
+        {% end %}
         <dt>Metainfo File</dt>
         <dd>{{ format_log_fpath(run.metainfo_file) }}</dd>
         <dt>Log File</dt>
@@ -52,10 +56,6 @@
         <dd>{{ format_log_fpath(run.meter_file) }}</dd>
         <dt>TensorBoard Dir</dt>
         <dd><pre>{{ run.tb_dir }}</pre></dd>
-        {% for k, v in format_extra_items(run).items() %}
-        <dt>{{ k }}</dt>
-        <dd>{{ v }}</dd>
-        {% end %}
         <dt>Extra Information</dt>
         <dd>{{ format_kv_recursive(run.extra_info) }}</dd>
     </dl>

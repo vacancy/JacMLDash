@@ -27,8 +27,8 @@ class IndexHandler(JacRequestHandler):
 class APISearchListHandler(JacRequestHandler):
     def get(self):
         self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-        descs = Desc.select().execute()
 
+        descs = Desc.select().execute()
         outputs = list()
         for desc in descs:
             outputs.append(f'#desc/{desc.desc_name}')
@@ -39,6 +39,5 @@ class APISearchListHandler(JacRequestHandler):
             for expr in desc.exprs:
                 for run in expr.runs:
                     outputs.append(f'#desc/{desc.desc_name}/expr/{expr.expr_name}/run/{run.run_name}')
-
         self.write(json.dumps(outputs))
 
