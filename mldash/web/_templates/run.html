@@ -48,14 +48,22 @@
         <dt>{{ k }}</dt>
         <dd>{{ v }}</dd>
         {% end %}
+        {% if run.metainfo_file is not None %}
         <dt>Metainfo File</dt>
         <dd>{{ format_log_fpath(run.metainfo_file) }}</dd>
+        {% end %}
+        {% if run.log_file is not None %}
         <dt>Log File</dt>
         <dd>{{ format_log_fpath(run.log_file) }}</dd>
+        {% end %}
+        {% if run.meter_file is not None %}
         <dt>Meter File</dt>
         <dd>{{ format_log_fpath(run.meter_file) }}</dd>
+        {% end %}
+        {% if run.tb_dir is not None %}
         <dt>TensorBoard Dir</dt>
         <dd><pre>{{ run.tb_dir }}</pre></dd>
+        {% end %}
         <dt>Extra Information</dt>
         <dd>{{ format_kv_recursive(run.extra_info) }}</dd>
     </dl>
