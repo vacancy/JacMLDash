@@ -51,12 +51,12 @@
                 <div class="list-group list-group-root card mb-4">
                     <a href="#desc/__all__" class="list-group-item desc-link">Overview</a>
                     <a href="#desc/__star__" class="list-group-item desc-link">Stared<a>
-                    {% for desc in descs %}
+                    {% for desc in sorted(descs, key=lambda x: x.desc_name) %}
                     <a href="#desc/{{ desc.desc_name }}" class="list-group-item desc-link">
                         {{ desc.desc_name }}
                     </a>
                     <div class="list-group" id="desc-{{ desc.desc_name }}">
-                        {% for expr in desc.exprs.execute() %}
+                        {% for expr in sorted(desc.exprs.execute(), key=lambda x: x.expr_name) %}
                         <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}" class="list-group-item expr-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}">{{ expr.expr_name }}</a>
                         {% end %}
                     </div>
