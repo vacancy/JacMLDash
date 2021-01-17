@@ -51,7 +51,7 @@
                 <div class="list-group list-group-root card mb-4">
                     <a href="#desc/__all__" class="list-group-item desc-link">Overview</a>
                     <a href="#desc/__star__" class="list-group-item desc-link">Stared<a>
-                    {% for desc in sorted(descs, key=lambda x: x.desc_name) %}
+                    {% for desc in reversed(descs) %}
                     <a href="#desc/{{ desc.desc_name }}" class="list-group-item desc-link">
                         {{ desc.desc_name }}
                     </a>
