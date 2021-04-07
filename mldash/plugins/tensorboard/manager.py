@@ -18,6 +18,7 @@ import threading
 
 from mldash.data.orm import Desc, Experiment, Run
 
+
 __all__ = ['tensorboard_manager']
 
 
@@ -76,10 +77,11 @@ class TensorboardManager(object):
         logdirs_string = ','.join(['{}:{}'.format(k, v) for k, v in logdirs.items()])
         port = find_port()
 
-        process = subprocess.Popen(
-            ['tensorboard', '--logdir', logdirs_string, '--port', str(port)],
-            stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w')
-        )
+        cmd = ['tensorboard', '--logdir', logdirs_string, '--port', str(port)]
+        import tensorflow as tf
+        if tf.__version__ >= '2.0.0':
+            cmd.append('--bind_all')
+        process = subprocess.Popen(cmd, stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w'))
         record = dict(index=self.index, logdirs=logdirs, logdirs_string=logdirs_string, descs=descs, exprs=exprs, port=port, process=process)
 
         self.index += 1
