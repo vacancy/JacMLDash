@@ -88,7 +88,7 @@ body {
 
 @media (min-width: 768px) {
   [role="main"] {
-    padding-top: 48px;
+    padding-top: 0px;
   }
 }
 
@@ -131,7 +131,7 @@ body {
   border: 1px solid #CCCCCC;
   border-left: none;
   border-right: none;
-  margin: 0 15px;
+  margin: 0;
   padding: 0 15px;
 
   display:block;
@@ -146,7 +146,7 @@ body {
 .experiment dd {
   display:block;
 
-  margin: 0 15px;
+  margin: 0;
   padding: 0 15px;
   width:100%;
 }

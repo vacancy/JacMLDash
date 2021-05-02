@@ -11,7 +11,7 @@
 </div>
 
 <div class="experiment">
-    <dl class="row">
+    <dl>
         {% if len(run_methods) > 0 %}
         <dt>Customized Commands</dt>
         <dd>
@@ -21,9 +21,9 @@
         </dd>
         {% end %}
         <dt>Run Description <a href="javascript:;" onClick="updateText(this)" id="edit-desc-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-key="run_description" data-preid="edit-desc">Edit</a></dt>
-        <dd><pre class="pre-url" id="edit-desc">{{ run.run_description }}</pre></dd>
+        <dd><pre class="pre-url" id="edit-desc">{{ format_viewer_link(run.run_description) }}</pre></dd>
         <dt>Run Notes <a href="javascript:;" onClick="updateText(this)" id="edit-note-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-key="run_notes" data-preid="edit-note">Edit</a></dt>
-        <dd><pre class="pre-url" id="edit-note">{{ run.run_notes }}</pre></dd>
+        <dd><pre class="pre-url" id="edit-note">{{ format_viewer_link(run.run_notes) }}</pre></dd>
         <dt>Create Time</dt>
         <dd>{{ run.create_time }}</dd>
         <dt>Update Time</dt>
@@ -65,7 +65,7 @@
         <dd><pre>{{ run.tb_dir }}</pre></dd>
         {% end %}
         <dt>Extra Information</dt>
-        <dd>{{ format_kv_recursive(run.extra_info) }}</dd>
+        <dd>{{ format_viewer_link(format_kv_recursive(run.extra_info)) }}</dd>
     </dl>
 
     {% if len(run.referee) > 0 %}
@@ -75,8 +75,8 @@
                 <tr>
                     <th>
                         <div class="header clearfix">
-                            <h5 class="float-left">Sub-Runs</h5>
-                            <div class="float-right">
+                            <h5 class="float-start">Sub-Runs</h5>
+                            <div class="float-end">
                                 <a href="javascript:;" onClick="deleteRuns(this)">Delete</a>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                 <tr>
                     <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ rrun.run_name }}" data-highlight="{{ format_kv_inline_tb(rrun.highlight_args) }}">
                         <div class="d-flex">
-                            <div class="mr-2"><input type="checkbox" /></div>
+                            <div class="me-2"><input type="checkbox" /></div>
                             <div>
                                 <div><b>SubRun:</b>
                                     <a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ rrun.run_name }}" onClick="loadPage(this)" class="run-link">{{ rrun.run_name }}</a>
@@ -99,7 +99,7 @@
                                 <div><b>Command:</b> <code>{{ rrun.command }}</code></div>
                                 <div><b>Highlight args:</b> {{ format_kv_inline(rrun.highlight_args) }}</div>
                                 <div><b>Highlight configs:</b> {{ format_kv_inline(rrun.highlight_configs) }}</div>
-                                <div><b>Description:</b> <span class="inline-pre pre-url">{{ rrun.run_description }}</span></div>
+                                <div><b>Description:</b> <span class="inline-pre pre-url">{{ format_viewer_link(rrun.run_description) }}</span></div>
                             </div>
                         </div>
                     </td>

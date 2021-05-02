@@ -1,3 +1,8 @@
+.list-group-header {
+  font-size: .875rem;
+  padding: .5rem 1rem;
+}
+
 .list-group.list-group-root {
   padding: 0;
   overflow: hidden;
@@ -18,11 +23,11 @@
 }
 
 .list-group.list-group-root > .list-group > .list-group-item {
-  padding-left: 30px;
+  padding-left: 1rem;
 }
 
 .list-group.list-group-root > .list-group > .list-group > .list-group-item {
-  padding-left: 45px;
+  padding-left: 2rem;
 }
 
 .list-group-item .glyphicon {

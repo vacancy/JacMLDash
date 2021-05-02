@@ -20,6 +20,7 @@ from mldash.web.ui_methods import get_ui_methods, register_ui_methods
 from mldash.web.run_methods import register_run_methods
 from mldash.web.custom_pages import register_custom_pages
 
+import tornado.web
 import tornado.ioloop
 
 logger = get_logger(__file__)
@@ -56,7 +57,8 @@ def main():
         'mldash.web.app.experiment',
         'mldash.plugins.tensorboard.handler',
         'mldash.plugins.trashbin.handler',
-        'mldash.plugins.star.handler'
+        'mldash.plugins.star.handler',
+        'mldash.plugins.viewer.handler'
     ], {
         'gzip': True,
         'debug': args.debug,
@@ -73,6 +75,7 @@ def main():
         "cookie_prefix": 'jac_',
         'session_engine': 'off',
     })
+
     app.listen(args.port, xheaders=True)
 
     logger.critical('Mainloop started. Port: {}.'.format(args.port))

@@ -29,7 +29,7 @@
                             (<b>Created:</b> {{ desc.create_time }}; <b>Updated</b>: {{ desc.update_time }})
                         </div>
                         <div><b>Metrics:</b> {{ format_kv_inline(desc.metrics) }}</div>
-                        <div><b>Description:</b> <span class="inline-pre pre-url">{{ desc.desc_description }}</span></div>
+                        <div><b>Description:</b> <span class="inline-pre pre-url">{{ format_viewer_link(desc.desc_description) }}</span></div>
                     </td>
                 </tr>
                 {% end %}
@@ -52,7 +52,7 @@
                             (<b>Created:</b> {{ expr.create_time }}; <b>Updated</b>: {{ expr.update_time }})
                         </div>
                         <div><b>Metrics:</b> {{ format_kv_inline(expr.metrics) }}</div>
-                        <div><b>Description:</b> <span class="inline-pre pre-url">{{ expr.expr_description }}</span></div>
+                        <div><b>Description:</b> <span class="inline-pre pre-url">{{ format_viewer_link(expr.expr_description) }}</span></div>
                     </td>
                 </tr>
                 {% end %}
@@ -69,8 +69,8 @@
                 <tr>
                     <th>
                         <div class="header clearfix">
-                            <h5 class="float-left">Runs</h5>
-                            <div class="float-right">
+                            <h5 class="float-start">Runs</h5>
+                            <div class="float-end">
                                 <a href="javascript:;" onClick="runTensorboard(this)">Tensorboard</a> /
                                 <a href="javascript:;" onClick="deleteRuns(this)">Delete</a>
                             </div>
@@ -87,7 +87,7 @@
                 <tr>
                     <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-highlight="{{ format_kv_inline_tb(run.highlight_args) }}">
                         <div class="d-flex">
-                        <div class="mr-2">
+                        <div class="me-2">
                             <input type="checkbox" />
                             {% if is_stared(run) %} <br /><i class="fa fa-star" style="color: #ffcc66;"></i> {% end %}
                         </div>
@@ -108,7 +108,7 @@
                             {% if run.refer is not None %}
                             <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
                             {% end %}
-                            <div><b>Description:</b> <span class="inline-pre pre-url">{{ run.run_description }}</span></div>
+                            <div><b>Description:</b> <span class="inline-pre pre-url">{{ format_viewer_link(run.run_description) }}</span></div>
                         </div>
                         </div>
 
@@ -132,10 +132,10 @@
                 {% for run in tensorboards %}
                 <tr><td>
                     <div class="header clearfix">
-                    <div class="float-left">
+                    <div class="float-start">
                         <b>Link:</b> {{ format_tb_link(run['port']) }}
                     </div>
-                    <div class="float-right"><a href="javascript:;" onClick="termTensorboard(this);" data-index="{{ run['index'] }}">Terminate</a></div>
+                    <div class="float-end"><a href="javascript:;" onClick="termTensorboard(this);" data-index="{{ run['index'] }}">Terminate</a></div>
                     </div>
                     <div><b>Log Dirs:</b> {{ format_kv(run['logdirs']) }}</div>
                 </td></tr>

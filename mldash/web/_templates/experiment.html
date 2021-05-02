@@ -7,24 +7,14 @@
             <li class="breadcrumb-item active" aria-current="page">{{ expr.expr_name }}</li>
         </ol>
     </nav>
-    <!-- <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-        </div>
-        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
-        </button>
-    </div> -->
 </div>
 
 <div class="experiment">
-    <dl class="row">
+    <dl>
         <dt>Expr Description <a href="javascript:;" onClick="updateText(this)" id="edit-desc-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-key="expr_description" data-preid="edit-desc">Edit</a></dt>
-        <dd><pre class="pre-url" id="edit-desc">{{ expr.expr_description }}</pre></dd>
+        <dd><pre class="pre-url" id="edit-desc">{{ format_viewer_link(expr.expr_description) }}</pre></dd>
         <dt>Expr Notes <a href="javascript:;" onClick="updateText(this)" id="edit-note-link" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-key="expr_notes" data-preid="edit-note">Edit</a></dt>
-        <dd><pre class="pre-url" id="edit-note">{{ expr.expr_notes }}</pre></dd>
+        <dd><pre class="pre-url" id="edit-note">{{ format_viewer_link(expr.expr_notes) }}</pre></dd>
         <dt>Create Time</dt>
         <dd>{{ expr.create_time }}</dd>
         <dt>Update Time</dt>
@@ -39,8 +29,8 @@
                 <tr>
                     <th>
                         <div class="header clearfix">
-                            <h5 class="float-left">Runs</h5>
-                            <div class="float-right">
+                            <h5 class="float-start">Runs</h5>
+                            <div class="float-end">
                                 <a href="javascript:;" onClick="runTensorboard(this)">Tensorboard</a> /
                                 <a href="javascript:;" onClick="deleteRuns(this)">Delete</a>
                             </div>
@@ -54,7 +44,7 @@
                 <tr>
                     <td class="run-row" data-desc="{{ desc.desc_name }}" data-expr="{{ expr.expr_name }}" data-run="{{ run.run_name }}" data-highlight="{{ format_kv_inline_tb(run.highlight_args) }}">
                         <div class="d-flex">
-                            <div class="mr-2">
+                            <div class="me-2">
                                 <input type="checkbox" />
                                 {% if is_stared(run) %} <br /><i class="fa fa-star" style="color: #ffcc66;"></i> {% end %}
                             </div>
@@ -75,7 +65,7 @@
                                 {% if run.refer is not None %}
                                 <div><b>Parent:</b> <span><a href="#desc/{{ desc.desc_name }}/expr/{{ expr.expr_name }}/run/{{ run.refer.run_name }}" onClick="loadPage(this)" class="run-link" >{{ run.refer.run_name }}</a></span></div>
                                 {% end %}
-                                <div><b>Description:</b> <span class="inline-pre pre-url">{{ run.run_description }}</span></div>
+                                <div><b>Description:</b> <span class="inline-pre pre-url">{{ format_viewer_link(run.run_description) }}</span></div>
                             </div>
                         </div>
                     </td>
@@ -95,10 +85,10 @@
                 {% for run in tensorboards %}
                 <tr><td>
                     <div class="header clearfix">
-                    <div class="float-left">
+                    <div class="float-start">
                         <b>Link:</b> {{ format_tb_link(run['port']) }}
                     </div>
-                    <div class="float-right"><a href="javascript:;" onClick="termTensorboard(this);" data-index="{{ run['index'] }}">Terminate</a></div>
+                    <div class="float-end"><a href="javascript:;" onClick="termTensorboard(this);" data-index="{{ run['index'] }}">Terminate</a></div>
                     </div>
                     <div><b>Log Dirs:</b> {{ format_kv(run['logdirs']) }}</div>
                 </td></tr>

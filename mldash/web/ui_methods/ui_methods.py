@@ -14,6 +14,10 @@ from jacinle.utils.meta import dict_deep_kv
 from .config import allow_custom_ui_method
 
 
+def escape_desc_name(handler, x):
+    return x.replace('.', '_')
+
+
 @allow_custom_ui_method
 def format_kv(handler, kvs):
     if kvs is None or kvs == '':
@@ -74,7 +78,9 @@ def format_fpath(handler, path):
 
 @allow_custom_ui_method
 def format_log_fpath(handler, path):
-    return '<code>' + path + '</code>'
+    if path is None or path == '':
+        return 'N/A'
+    return f'<a href="viewer/{path}" target="_blank">{path}</a>'
 
 
 @allow_custom_ui_method
@@ -104,4 +110,9 @@ def is_deleted(handler, run):
 def is_stared(handler, run):
     from mldash.plugins.star import is_stared
     return is_stared(run)
+
+
+@allow_custom_ui_method
+def format_viewer_link(handler, s):
+    return s.replace('viewer://', '/viewer/')
 

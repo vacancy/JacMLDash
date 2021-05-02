@@ -19,8 +19,21 @@ class IndexHandler(JacRequestHandler):
     def get(self):
         metainfo = ProjectMetainfo.get_all()
         descs = Desc.select().execute()
-        kwargs = {'metainfo': metainfo, 'title': metainfo['title'], 'descs': descs, 'custom_pages': get_custom_pages()}
+        kwargs = {'metainfo': metainfo, 'title': metainfo['title'], 'desc_groups': self.group_descs(descs), 'custom_pages': get_custom_pages()}
+
         self.render('index.html', **kwargs)
+
+    def group_descs(self, descs):
+        group = dict()
+        for desc in reversed(descs):
+            if '/' in desc.desc_name:
+                pos = desc.desc_name.find('/')
+                group_name = desc.desc_name[:pos]
+                desc_name = desc.desc_name[pos + 1:]
+                group.setdefault(group_name, dict())[desc_name] = desc
+            else:
+                group[desc.desc_name] = desc
+        return group
 
 
 @route(r'/api/search-list')
