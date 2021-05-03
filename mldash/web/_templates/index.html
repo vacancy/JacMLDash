@@ -53,7 +53,7 @@
                     <a href="#desc/__star__" class="list-group-item desc-link">Stared</a>
                     {% for group_name, desc in desc_groups.items() %}
                         {% if isinstance(desc, dict) %}
-                        <div class="accordion-item">
+                        <div class="accordion-item" data-desc-group="{{ group_name }}">
                             <div class="accordion-header" id="desc-header-{{ escape_desc_name(group_name) }}">
                                 <button class="accordion-button list-group-header collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#desc-body-{{ escape_desc_name(group_name) }}" aria-expanded="false" aria-controls="desc-body-{{ escape_desc_name(group_name) }}">
                                     {{ group_name }}
