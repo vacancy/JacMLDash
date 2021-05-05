@@ -16,7 +16,10 @@ import errno
 import atexit
 import threading
 
+from jacinle.logging import get_logger
 from mldash.data.orm import Desc, Experiment, Run
+
+logger = get_logger(__file__)
 
 
 __all__ = ['tensorboard_manager']
@@ -64,12 +67,12 @@ class TensorboardManager(object):
                 continue
 
             key = run.expr.desc.desc_name + '/' + run.expr.expr_name + '/' + run.run_name + '/' + spec['highlight']
-            key = key.replace(';', '_').replace(' ', '')
+            key = escape_tensorboard_name(key)
             value = run.tb_dir
             if value is not None and value != '':
                 logdirs[key] = value
             descs.add(spec['desc'])
-            exprs.add((spec['desc'], spec['expr']))
+            exprs.add((spec['desc'], str(spec['expr'])))
 
         if len(logdirs) == 0:
             return None
@@ -80,8 +83,10 @@ class TensorboardManager(object):
         cmd = ['tensorboard', '--logdir', logdirs_string, '--port', str(port)]
         import tensorflow as tf
         if tf.__version__ >= '2.0.0':
+            cmd[1] = '--logdir_spec'
             cmd.append('--bind_all')
         process = subprocess.Popen(cmd, stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w'))
+        logger.critical('Start tensorboard service: "{}".'.format(' '.join(cmd)))
         record = dict(index=self.index, logdirs=logdirs, logdirs_string=logdirs_string, descs=descs, exprs=exprs, port=port, process=process)
 
         self.index += 1
@@ -118,4 +123,10 @@ class TensorboardManager(object):
 
 
 tensorboard_manager = TensorboardManager()
+
+
+def escape_tensorboard_name(key):
+    key = key.replace(';', '_').replace(' ', '')
+    key = key.replace(':', '/').replace(',', '/')
+    return key
 

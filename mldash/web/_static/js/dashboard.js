@@ -31,7 +31,7 @@ function loadPageWithURI(anchor) {
     for (var i = 0; i < all_accordion.length; i += 1) {
         element = all_accordion[i];
         group_name = $(element).data('desc-group');
-        if (desc.startsWith(group_name + '/') || desc == group_name) {
+        if (desc.startsWith(group_name) || desc == group_name) {
             $(element).find('button').removeClass('collapsed');
             $(element).find('button').attr('aria-expanded', true);
             $(element).find('.accordion-collapse').addClass('show');
