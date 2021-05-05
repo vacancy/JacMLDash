@@ -30,8 +30,8 @@ function loadPageWithURI(anchor) {
     all_accordion = $('.sidebar .accordion-item');
     for (var i = 0; i < all_accordion.length; i += 1) {
         element = all_accordion[i];
-        group_name = $(element).data('desc-group') + '/';
-        if (desc.startsWith(group_name)) {
+        group_name = $(element).data('desc-group');
+        if (desc.startsWith(group_name + '/') || desc == group_name) {
             $(element).find('button').removeClass('collapsed');
             $(element).find('button').attr('aria-expanded', true);
             $(element).find('.accordion-collapse').addClass('show');
@@ -100,8 +100,12 @@ function runTensorboard(elem) {
 
     $.get('tensorboard/start', { spec: JSON.stringify(tb_runs) }, function(data) {
         var data = JSON.parse(data);
-        window.open(data["url"], '_blank');
-        loadHash();
+        if ("error" in data) {
+            alert(data["error"]);
+        } else {
+            window.open(data["url"], '_blank');
+            loadHash();
+        }
     });
 }
 

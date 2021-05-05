@@ -32,7 +32,7 @@ class IndexHandler(JacRequestHandler):
                 desc_name = desc.desc_name[pos + 1:]
                 group.setdefault(group_name, dict())[desc_name] = desc
             else:
-                group[desc.desc_name] = desc
+                group[desc.desc_name] = {desc.desc_name: desc}
         return group
 
 

@@ -22,7 +22,12 @@ class TensorboardHandler(JacRequestHandler):
         host = self.request.host
         if ':' in host:
             host = host[:host.find(':')]
-        self.write(io.dumps_json({'url': 'http://' + host + ':' + str(record['port'])}))
+
+        if record is not None:
+            self.write(io.dumps_json({'url': 'http://' + host + ':' + str(record['port'])}))
+        else:
+            self.write(io.dumps_json({'error': 'Fail to start the tensorboard visualizer: got empty selection.'}))
+
 
 
 @route(r'/tensorboard/terminate')
