@@ -18,6 +18,10 @@
   padding: .5rem 1rem;
 }
 
+.list-group.list-group-root {
+  border-radius: 0;
+}
+
 .list-group.list-group-root > .list-group-item:first-child {
   border-top-width: 0;
 }
@@ -32,4 +36,33 @@
 
 .list-group-item .glyphicon {
   margin-right: 5px;
+}
+
+.accordion-collapse.show .list-group-item {
+    border-left: 6px solid #97c1ff;
+}
+
+#desc-accordion .accordion:nth-child(4n + 0) .accordion-button:not(.collapsed) {
+    background-color: #ffebcb;
+}
+#desc-accordion .accordion:nth-child(4n + 1) .accordion-button:not(.collapsed) {
+    background-color: #ecf8d2;
+}
+#desc-accordion .accordion:nth-child(4n + 2) .accordion-button:not(.collapsed) {
+    background-color: #ffe7f4;
+}
+#desc-accordion .accordion:nth-child(4n + 3) .accordion-button:not(.collapsed) {
+    background-color: #d4e9fb;
+}
+#desc-accordion .accordion:nth-child(4n + 0) .accordion-collapse.show .list-group-item {
+    border-left: 6px solid #ffab9b;
+}
+#desc-accordion .accordion:nth-child(4n + 1) .accordion-collapse.show .list-group-item {
+    border-left: 6px solid #48bb2a;
+}
+#desc-accordion .accordion:nth-child(4n + 2) .accordion-collapse.show .list-group-item {
+    border-left: 6px solid #ff8cad;
+}
+#desc-accordion .accordion:nth-child(4n + 3) .accordion-collapse.show .list-group-item {
+    border-left: 6px solid #98c8ff;
 }
