@@ -28,7 +28,7 @@ class IndexHandler(JacRequestHandler):
         ui_methods = get_ui_methods()
         group = dict()
         for desc in reversed(descs):
-            group_name, desc_name = ui_methods.split_group_name(desc.desc_name)
+            group_name, desc_name = ui_methods.split_group_name(self, desc.desc_name)
             group.setdefault(group_name, dict())[desc_name] = desc
         return group
 
