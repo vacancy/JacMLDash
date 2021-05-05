@@ -11,6 +11,7 @@
 import json
 from jacweb.web import route, JacRequestHandler
 from mldash.data.orm import init_database, ProjectMetainfo, Desc
+from mldash.web.ui_methods import get_ui_methods
 from mldash.web.custom_pages import get_custom_pages
 
 
@@ -24,15 +25,11 @@ class IndexHandler(JacRequestHandler):
         self.render('index.html', **kwargs)
 
     def group_descs(self, descs):
+        ui_methods = get_ui_methods()
         group = dict()
         for desc in reversed(descs):
-            if '/' in desc.desc_name:
-                pos = desc.desc_name.find('/')
-                group_name = desc.desc_name[:pos]
-                desc_name = desc.desc_name[pos + 1:]
-                group.setdefault(group_name, dict())[desc_name] = desc
-            else:
-                group[desc.desc_name] = {desc.desc_name: desc}
+            group_name, desc_name = ui_methods.split_group_name(desc.desc_name)
+            group.setdefault(group_name, dict())[desc_name] = desc
         return group
 
 

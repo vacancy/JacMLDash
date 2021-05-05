@@ -116,3 +116,14 @@ def is_stared(handler, run):
 def format_viewer_link(handler, s):
     return s.replace('viewer://', '/viewer/')
 
+@allow_custom_ui_method
+def split_group_name(handler, desc_name):
+    if '/' in desc_name:
+        pos = desc_name.find('/')
+        group_name = desc_name[:pos]
+        desc_name = desc_name[pos + 1:]
+    else:
+        group_name = desc_name
+
+    return group_name, desc_name
+
