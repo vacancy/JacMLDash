@@ -116,6 +116,55 @@ function termTensorboard(elem) {
     });
 }
 
+function deleteDescs(elem) {
+    var elem = $(elem);
+    var runs = $(".desc-row");
+    var trash_runs = [];
+    for (var i = 0; i < runs.length; i++) {
+        let r = $(runs[i]);
+        if ($("input[type='checkbox']", r).prop("checked")) {
+            trash_runs.push({
+                desc: $(r).data("desc")
+            });
+        }
+    }
+
+    $.get('trashbin/delete', { spec: JSON.stringify(trash_runs) }, function(data) {
+        var data = JSON.parse(data);
+        console.log(data);
+        if ("error" in data) {
+            alert(data["error"]);
+        } else {
+            loadHash();
+        }
+    });
+}
+
+function deleteExperiments(elem) {
+    var elem = $(elem);
+    var runs = $(".expr-row");
+    var trash_runs = [];
+    for (var i = 0; i < runs.length; i++) {
+        let r = $(runs[i]);
+        if ($("input[type='checkbox']", r).prop("checked")) {
+            trash_runs.push({
+                desc: $(r).data("desc"),
+                expr: $(r).data("expr")
+            });
+        }
+    }
+
+    $.get('trashbin/delete', { spec: JSON.stringify(trash_runs) }, function(data) {
+        var data = JSON.parse(data);
+        console.log(data);
+        if ("error" in data) {
+            alert(data["error"]);
+        } else {
+            loadHash();
+        }
+    });
+}
+
 function deleteRuns(elem) {
     var elem = $(elem);
     var runs = $(".run-row");
@@ -131,8 +180,14 @@ function deleteRuns(elem) {
         }
     }
 
-    $.get('trashbin/delete', { spec: JSON.stringify(trash_runs) }, function() {
-        loadHash();
+    $.get('trashbin/delete', { spec: JSON.stringify(trash_runs) }, function(data) {
+        var data = JSON.parse(data);
+        console.log(data);
+        if ("error" in data) {
+            alert(data["error"]);
+        } else {
+            loadHash();
+        }
     });
 }
 

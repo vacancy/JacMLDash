@@ -10,10 +10,16 @@
 
 import sys
 import contextlib
+import peewee
+import time
+import random
+import jacinle
 import jacinle.io as io
 from mldash.data.orm import init_database, init_project, Desc, Experiment, Run
 
 __all__ = ['MLDashClient']
+
+logger = jacinle.get_logger(__file__)
 
 
 class MLDashClient(object):
@@ -51,7 +57,7 @@ class MLDashClient(object):
             if getattr(args, 'configs', None) is not None:
                 run.highlight_configs = io.dumps_json(args.configs.kvs)
 
-        run.save()
+        save_retry(run)
 
         self.desc = desc
         self.expr = expr
@@ -66,20 +72,20 @@ class MLDashClient(object):
         for k, v in kwargs.items():
             if v is not None:
                 setattr(self.run, k, v)
-        self.run.save()
+        save_retry(self.run)
 
     def update_parent(self, parent, is_master=False):
         self._refresh()
         self.run.is_master = is_master
         self.run.refer = Run.get_or_none(expr=self.expr, run_name=parent)
-        self.run.save()
+        save_retry(self.run)
 
     @contextlib.contextmanager
     def update_extra_info(self):
         self._refresh()
         yield
         self.run.update_extra_info()
-        self.run.save()
+        save_retry(self.run)
 
     def _log_metric_inner(self, key, value, target, update_func=None):
         if target.metrics is None:
@@ -94,7 +100,7 @@ class MLDashClient(object):
         else:
             current[key] = value
         target.metrics = io.dumps_json(current)
-        target.save()
+        save_retry(target)
 
     def _log_metric_dist(self, key, value, desc, expr, update_func=None):
         self._refresh()
@@ -122,4 +128,19 @@ def get_default_value_in_parser(parser, key):
         if rec.dest == key:
             return rec.default
     return None
+
+
+def save_retry(model, max_retries=5, wait=(5, 20)):
+    flag = False
+    last_exc = None
+    for i in range(max_retries):
+        try:
+            model.save()
+            flag = True
+            break
+        except peewee.OperationalError as e:
+            time.sleep(1/1000 * random.randint(wait[0], wait[1]))
+            last_exc = e
+    if not flag:
+        logger.warning('Database update failed after {} trials. Last exception message is {}.'.format(max_retries, last_exc))
 

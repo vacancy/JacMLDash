@@ -63,14 +63,18 @@
                                 <div class="accordion-body list-group list-group-root">
                                     <div class="list-group" id="desc-{{ escape_desc_name(group_name) }}">
                                         {% for desc_name, sub_desc in desc.items() %}
+                                        {% if not is_deleted(sub_desc) %}
                                         <a href="#desc/{{ sub_desc.desc_name }}" class="list-group-item desc-link">
                                             {{ desc_name }}
                                         </a>
                                         <div class="list-group" id="desc-{{ escape_desc_name(sub_desc.desc_name) }}">
                                             {% for expr in sorted(sub_desc.exprs.execute(), key=lambda x: x.expr_name) %}
+                                            {% if not is_deleted(expr) %}
                                             <a href="#desc/{{ sub_desc.desc_name }}/expr/{{ expr.expr_name }}" class="list-group-item expr-link" data-desc="{{ sub_desc.desc_name }}" data-expr="{{ expr.expr_name }}">{{ expr.expr_name }}</a>
                                             {% end %}
+                                            {% end %}
                                         </div>
+                                        {% end %}
                                         {% end %}
                                     </div>
                                 </div>

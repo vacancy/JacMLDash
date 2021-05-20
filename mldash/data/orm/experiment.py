@@ -17,12 +17,27 @@ import jacinle.io as io
 class ModelWithCUTime(peewee.Model):
     create_time = peewee.DateTimeField("%Y-%m-%d %H:%M:%S", default=datetime.now)
     update_time = peewee.DateTimeField("%Y-%m-%d %H:%M:%S", default=datetime.now)
+    extra_info = peewee.TextField(null=True)
 
     def save(self, *args, **kwargs):
         if self.get_id() is None:
             self.create_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         return super().save(*args, **kwargs)
+
+    _extra_info_dict_cache = None
+
+    @property
+    def extra_info_dict(self):
+        if self._extra_info_dict_cache is None:
+            if self.extra_info is None or self.extra_info == '':
+                self._extra_info_dict_cache = dict()
+            else:
+                self._extra_info_dict_cache = io.loads_json(self.extra_info)
+        return self._extra_info_dict_cache
+
+    def update_extra_info(self):
+        self.extra_info = io.dumps_json(self.extra_info_dict)
 
 
 @register_model
@@ -62,7 +77,6 @@ class Run(ModelWithCUTime):
     log_file = peewee.TextField(null=True)
     meter_file = peewee.TextField(null=True)
     tb_dir = peewee.TextField(null=True)
-    extra_info = peewee.TextField(null=True)
     metrics = peewee.TextField(null=True)
 
     is_master = peewee.BooleanField(default=True)
@@ -70,18 +84,4 @@ class Run(ModelWithCUTime):
 
     class Meta:
         indexes = [(('expr', 'run_name'), True)]
-
-    _extra_info_dict_cache = None
-
-    @property
-    def extra_info_dict(self):
-        if self._extra_info_dict_cache is None:
-            if self.extra_info is None or self.extra_info == '':
-                self._extra_info_dict_cache = dict()
-            else:
-                self._extra_info_dict_cache = io.loads_json(self.extra_info)
-        return self._extra_info_dict_cache
-
-    def update_extra_info(self):
-        self.extra_info = io.dumps_json(self.extra_info_dict)
 

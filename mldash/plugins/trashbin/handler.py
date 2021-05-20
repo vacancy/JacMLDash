@@ -18,5 +18,9 @@ from .manager import mark_as_trash_by_spec
 class TrashbinDeleteHandler(JacRequestHandler):
     def get(self):
         spec = json.loads(self.get_argument('spec'))
-        record = mark_as_trash_by_spec(spec)
+        failed = mark_as_trash_by_spec(spec)
+        if len(failed):
+            self.write(json.dumps({'status': 'ERROR', 'error': 'Failed:\n' + '\n'.join(failed)}))
+        else:
+            self.write(json.dumps({'status': 'OK'}))
 
