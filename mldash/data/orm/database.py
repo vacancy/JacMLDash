@@ -59,7 +59,7 @@ def migrate_database(db, path):
     else:
         ver = '1.0'
 
-    if ver != '1.1':
+    if ver != get_latest_version():
         shutil.copyfile(path, path + '.' + ver)
         if ver == '1.0':
             ver = migrate_1_1(db)
@@ -77,4 +77,8 @@ def migrate_1_1(db):
     )
     return '1.1'
 
+
+
+def get_latest_version():
+    return '1.1'
 

@@ -12,7 +12,7 @@ import os
 import os.path as osp
 from datetime import datetime
 import peewee
-from .database import register_model
+from .database import register_model, get_latest_version
 
 
 @register_model
@@ -41,6 +41,7 @@ def init_project():
     if len(ProjectMetainfo.get_all()) == 0:
         ProjectMetainfo.set_all({
             'title': osp.basename(os.getcwd()),
-            'create_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            'create_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'dbversion': get_latest_version()
         })
 
