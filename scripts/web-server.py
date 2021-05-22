@@ -14,7 +14,7 @@ from jacinle.logging import get_logger
 from jacinle.cli.argument import JacArgumentParser
 from jacinle.utils.imp import load_source
 from jacweb.web import make_app
-from mldash.data.orm import init_database, init_project, ProjectMetainfo, Desc, Experiment, Run
+from mldash.data.orm import init_database, ProjectMetainfo, Desc, Experiment, Run
 from mldash.web.path import get_static_path, get_template_path
 from mldash.web.ui_methods import get_ui_methods, register_ui_methods
 from mldash.web.run_methods import register_run_methods
@@ -35,7 +35,6 @@ args = parser.parse_args()
 
 def main():
     init_database(args.logdir)
-    init_project()
 
     py_filename = osp.join('jacmldash.py')
     if osp.isfile(py_filename):

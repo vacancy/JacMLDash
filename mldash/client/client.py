@@ -36,7 +36,6 @@ class MLDashClient(object):
         self.run = Run.get_by_id(self.run.get_id())
 
     def init(self, desc_name, expr_name, run_name, args=None, highlight_args=None, configs=None):
-        init_project()
         desc, _ = Desc.get_or_create(desc_name=desc_name)
         expr, _ = Experiment.get_or_create(desc=desc, expr_name=expr_name)
         run = Run(expr=expr, run_name=run_name, command=' '.join(sys.argv))

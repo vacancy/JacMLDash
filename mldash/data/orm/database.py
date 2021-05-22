@@ -32,6 +32,10 @@ def init_database(root):
     for table in _tables:
         table._meta.set_database(db)
     db.create_tables(_tables)
+
+    from .project import init_project
+    init_project()
+
     migrate_database(db, path)
 
 
