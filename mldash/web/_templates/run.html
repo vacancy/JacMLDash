@@ -28,6 +28,8 @@
         <dd>{{ run.create_time }}</dd>
         <dt>Update Time</dt>
         <dd>{{ run.update_time }}</dd>
+        <dt>Git</dt>
+        <dd>{{ run_metainfo.get('_git', 'N/A') }}</dd>
 
         {% if run.refer is not None %}
         <dt>Parent</dt>

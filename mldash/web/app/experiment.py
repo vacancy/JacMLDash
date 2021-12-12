@@ -8,6 +8,7 @@
 # This file is part of JacMLDash.
 # Distributed under terms of the MIT license.
 
+import json
 from jacweb.web import route, JacRequestHandler
 from mldash.data.orm import init_database, Desc, Experiment, Run
 from mldash.plugins.tensorboard.manager import tensorboard_manager
@@ -71,7 +72,12 @@ class RunHandler(JacRequestHandler):
         if run is None:
             return
 
-        self.render('run.html', run=run, expr=expr, desc=desc, run_methods=get_run_methods())
+        run_metainfo = dict()
+        if run.metainfo_file != '':
+            with open(run.metainfo_file) as f:
+                run_metainfo = json.load(f)
+
+        self.render('run.html', run=run, expr=expr, desc=desc, run_metainfo=run_metainfo, run_methods=get_run_methods())
 
 
 @route(r'.*/update/text')
