@@ -38,6 +38,23 @@
         </dd>
         {% end %}
 
+        <dt>
+        <div class="">
+            Metric Plots
+            <div id="metric-plot-dropdown" class="dropdown flow-end">
+                <a href="javscript:;" class="dropdown-toggle" id="metric-plot-dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="metric-plot-dropdown-button">
+                </ul>
+            </div>
+            <a href="javascript:;" data-bs-toggle="offcanvas" data-bs-target="#metric-plot-offcanvas" aria-controls="metric-plot-offcanvas">Show Raw Data</a>
+        </dt>
+        <dd>
+        <div class="container-fluid metric-plot-container">
+            <canvas id="metric-plot" width="900" height="250"></canvas>
+        </div>
+        </dd>
+
         <dt>Metrics</dt>
         <dd>{{ format_kv(run.metrics) }}</dd>
         <dt>Command</dt>
@@ -113,4 +130,40 @@
     </div>
     {% end %}
 </div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="metric-plot-offcanvas" aria-labelledby="metric-plot-offcanvas-label">
+  <div class="offcanvas-header">
+    <h5>Metrics</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="metric-plot-offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <pre id="metric-plot-data" class="inline-pre">
+    {{ run_metrics }}
+    </pre>
+  </div>
+</div>
+
+<script>
+window.metricData = JSON.parse($("#metric-plot-data").html());
+var metricKeys = [];
+for (let dict of metricData) {
+  for (let key in dict) {
+    if (!metricKeys.includes(key)) {
+      metricKeys.push(key);
+    }
+  }
+}
+metricKeys.sort();
+for (key of metricKeys) {
+  $("#metric-plot-dropdown ul").append($(' <li><a href="javascript:loadMetric(\'' + key + '\');" class="dropdown-iem">' + key + '</a></li> '));
+}
+
+if (metricKeys.includes("loss" )) {
+  loadMetric("loss");
+} else if (metricKeys.includes("accuracy")) {
+  loadMetric("accuracy");
+} else {
+  loadMetric(metricKeys[0]);
+}
+</script>
 

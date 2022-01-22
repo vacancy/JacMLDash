@@ -152,7 +152,7 @@ body {
 }
 
 .experiment textarea {
-    font-size: 87.5%;
+  font-size: 87.5%;
 }
 
 .experiment pre {
@@ -191,3 +191,29 @@ body {
     background-color:#F4F4F4;
 }
 
+.experiment .table-striped tbody {
+    border-top: 0px;
+}
+
+#metric-plot-dropdown {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+#metric-plot-dropdown a.dropdown-item, #metric-plot-dropdown a.dropdown-toggle {
+  margin-left: 0rem;
+}
+#metric-plot-dropdown a.dropdown-item {
+  padding: 0 1rem;
+}
+
+.metric-plot-container {
+  padding: 1rem 0 0 0;
+}
+
+#metric-plot {
+}
+#metric-plot-data {
+}
+#metric-plot-offcanvas {
+}

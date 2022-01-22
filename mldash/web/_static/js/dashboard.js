@@ -290,3 +290,42 @@ function runCustomizedCommand(elem) {
     window.open("/runcmd?desc=" + desc + "&expr=" + expr + "&run=" + run + "&cmd=" + cmd, "_blank");
 }
 
+
+function loadMetric(key) {
+    console.log(key);
+    $("#metric-plot-dropdown-button").html(key);
+    xaxis = [];
+    values = [];
+
+    var i = 0;
+    for (let dict of window.metricData) {
+        i += 1;
+        xaxis.push(i);
+        values.push(dict[key] || undefined);
+    }
+
+    data = {
+        labels: xaxis,
+        datasets: [{
+            label: key,
+            data: values,
+            lineTension: 0,
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 2,
+            pointBackgroundColor: '#007bff',
+            spanGaps: true
+        }]
+    };
+
+    var ctx = document.getElementById("metric-plot");
+    new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            scales: { yAxes: [{ ticks: { beginAtZero: false } }] },
+            legend: { display: false }
+        }
+    });
+}
+

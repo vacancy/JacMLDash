@@ -8,6 +8,7 @@
 # This file is part of JacMLDash.
 # Distributed under terms of the MIT license.
 
+import os.path as osp
 import json
 from jacweb.web import route, JacRequestHandler
 from mldash.data.orm import init_database, Desc, Experiment, Run
@@ -77,7 +78,23 @@ class RunHandler(JacRequestHandler):
             with open(run.metainfo_file) as f:
                 run_metainfo = json.load(f)
 
-        self.render('run.html', run=run, expr=expr, desc=desc, run_metainfo=run_metainfo, run_methods=get_run_methods())
+        run_metrics = list()
+        if run.meter_file != '' and osp.isfile(run.meter_file):
+            try:
+                with open(run.meter_file) as f:
+                    metrics_str = f.read()
+                metrics_str = metrics_str.split('\n}\n{')
+                for i, s in enumerate(metrics_str):
+                    if i > 0:
+                        s = '{' + s
+                    if i < len(metrics_str) - 1:
+                        s += '}'
+                    run_metrics.append(json.loads(s))
+            except Exception as e:
+                print(e)
+                pass
+
+        self.render('run.html', run=run, expr=expr, desc=desc, run_metrics=json.dumps(run_metrics, indent=2), run_metainfo=run_metainfo, run_methods=get_run_methods())
 
 
 @route(r'.*/update/text')
