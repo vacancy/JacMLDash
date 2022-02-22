@@ -127,3 +127,12 @@ def split_group_name(handler, desc_name):
 
     return group_name, desc_name
 
+
+def git_remote_url(handler):
+    from jacinle.cli.git import git_remote_url as inner
+    return inner()
+
+
+def git_recent_logs(handler, rh):
+    from jacinle.cli.git import git_recent_logs as inner
+    return inner(rh)

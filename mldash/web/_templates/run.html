@@ -28,8 +28,18 @@
         <dd>{{ run.create_time }}</dd>
         <dt>Update Time</dt>
         <dd>{{ run.update_time }}</dd>
-        <dt>Git</dt>
-        <dd>{{ run_metainfo.get('_git', 'N/A') }}</dd>
+        {% if '_git' in run_metainfo %}
+        <dt>Git <a href="javascript:;" data-bs-toggle="collapse" data-bs-target="#run-git-logs" aria-expanded="false" aria-controls="run-git-logs">[Toggle Logs]</a></dt>
+        <dd>
+          <a href="{{ git_remote_url() }}/tree/{{ run_metainfo['_git'] }}" target="_blank">{{ run_metainfo['_git'] }}</a>
+        </dd>
+        <div class="collapse" id="run-git-logs">
+          <dt>Git Log</dt>
+          <dd>
+          <pre>{{ escape(git_recent_logs(run_metainfo['_git'])) }}</pre>
+          </dd>
+        </div>
+        {% end %}
 
         {% if run.refer is not None %}
         <dt>Parent</dt>
