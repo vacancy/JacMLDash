@@ -14,6 +14,8 @@ from datetime import datetime
 import peewee
 from .database import register_model, get_latest_version
 
+__all__ = ['ProjectMetainfo', 'init_project']
+
 
 @register_model
 class ProjectMetainfo(peewee.Model):

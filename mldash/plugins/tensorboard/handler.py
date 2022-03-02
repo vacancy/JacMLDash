@@ -10,7 +10,7 @@
 
 import json
 import jacinle.io as io
-from jacweb.web import route, JacRequestHandler
+from jacinle.web.app import route, JacRequestHandler
 from .manager import tensorboard_manager
 
 

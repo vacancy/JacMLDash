@@ -9,8 +9,8 @@
 # Distributed under terms of the MIT license.
 
 import json
-from jacweb.web import route, JacRequestHandler
-from mldash.data.orm import init_database, ProjectMetainfo, Desc
+from jacinle.web.app import route, JacRequestHandler
+from mldash.data.orm import ProjectMetainfo, Desc
 from mldash.web.ui_methods import get_ui_methods
 from mldash.web.custom_pages import get_custom_pages
 

@@ -13,6 +13,8 @@ import peewee
 from .database import register_model
 import jacinle.io as io
 
+__all__ = ['ModelWithCUTime', 'Desc', 'Experiment', 'Run']
+
 
 class ModelWithCUTime(peewee.Model):
     create_time = peewee.DateTimeField("%Y-%m-%d %H:%M:%S", default=datetime.now)

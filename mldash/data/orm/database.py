@@ -14,7 +14,7 @@ import peewee
 import jacinle
 import jacinle.io as io
 
-__all__ = ['init_database', 'get_database', 'register_model']
+__all__ = ['init_database', 'get_database', 'register_model', 'migrate_database', 'migrate_1_1', 'get_latest_version']
 
 
 logger = jacinle.get_logger(__file__)
@@ -80,7 +80,6 @@ def migrate_1_1(db):
         migrator.add_column('Experiment', 'extra_info', extra_info)
     )
     return '1.1'
-
 
 
 def get_latest_version():

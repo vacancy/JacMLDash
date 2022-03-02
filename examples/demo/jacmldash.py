@@ -8,8 +8,8 @@
 # This file is part of JacMLDash.
 # Distributed under terms of the MIT license.
 
-# jacmldash.py is a config file that will be processed when you initialize the jacmldash web interface.
-# It contains a set of hooks that will be executed by the web interface to render the web pages.
+# jacmldash.py is a config file that will be processed when you initialize the jacmldash app interface.
+# It contains a set of hooks that will be executed by the app interface to render the app pages.
 
 import os.path as osp
 import json

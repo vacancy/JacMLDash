@@ -9,8 +9,7 @@
 # Distributed under terms of the MIT license.
 
 import json
-import jacinle.io as io
-from jacweb.web import route, JacRequestHandler
+from jacinle.web.app import route, JacRequestHandler
 from .manager import mark_as_stared_by_spec
 
 

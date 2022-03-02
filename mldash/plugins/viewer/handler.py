@@ -9,10 +9,8 @@
 # Distributed under terms of the MIT license.
 
 import os
-import os.path as osp
-import mimetypes
 from tornado.web import StaticFileHandler
-from jacweb.web import route, JacRequestHandler
+from jacinle.web.app import route
 
 
 @route(r'/viewer/(.*)')

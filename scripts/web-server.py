@@ -9,12 +9,11 @@
 # Distributed under terms of the MIT license.
 
 import os.path as osp
-import jacinle.io as io
 from jacinle.logging import get_logger
 from jacinle.cli.argument import JacArgumentParser
 from jacinle.utils.imp import load_source
-from jacweb.web import make_app
-from mldash.data.orm import init_database, ProjectMetainfo, Desc, Experiment, Run
+from jacinle.web.app import make_app
+from mldash.data.orm import init_database
 from mldash.web.path import get_static_path, get_template_path
 from mldash.web.ui_methods import get_ui_methods, register_ui_methods
 from mldash.web.run_methods import register_run_methods
