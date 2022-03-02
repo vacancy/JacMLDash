@@ -55,7 +55,7 @@ def register_model(cls):
 
 
 def migrate_database(db, path):
-    from mldash.data.orm.project import ProjectMetainfo
+    from mldash.orm.project import ProjectMetainfo
     key_values = ProjectMetainfo.get_all()
 
     if 'dbversion' in key_values:

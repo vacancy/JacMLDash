@@ -8,7 +8,7 @@
 # This file is part of JacMLDash.
 # Distributed under terms of the MIT license.
 
-from mldash.data.orm import Desc, Experiment, Run
+from mldash.orm import Desc, Experiment, Run
 
 
 def mark_as_trash(run):

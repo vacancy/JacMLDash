@@ -15,7 +15,7 @@ import time
 import random
 import jacinle
 import jacinle.io as io
-from mldash.data.orm import init_database, init_project, Desc, Experiment, Run
+from mldash.orm import init_database, Desc, Experiment, Run
 
 __all__ = ['MLDashClient']
 

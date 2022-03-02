@@ -9,7 +9,7 @@
 # Distributed under terms of the MIT license.
 
 import time
-from mldash.data.orm import init_database, ProjectMetainfo, Desc, Experiment, Run
+from mldash.orm import init_database, ProjectMetainfo, Desc, Experiment, Run
 
 
 def main():

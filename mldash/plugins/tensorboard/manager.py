@@ -10,14 +10,13 @@
 
 import os
 import subprocess
-import collections
 import socket
 import errno
 import atexit
 import threading
 
 from jacinle.logging import get_logger
-from mldash.data.orm import Desc, Experiment, Run
+from mldash.orm import Desc, Experiment, Run
 
 logger = get_logger(__file__)
 

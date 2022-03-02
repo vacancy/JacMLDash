@@ -11,7 +11,7 @@
 import os.path as osp
 import json
 from jacinle.web.app import route, JacRequestHandler
-from mldash.data.orm import Desc, Experiment, Run
+from mldash.orm import Desc, Experiment, Run
 from mldash.plugins.tensorboard.manager import tensorboard_manager
 from mldash.web.run_methods import get_run_methods
 from mldash.web.custom_pages import get_custom_pages
