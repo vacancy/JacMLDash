@@ -318,8 +318,12 @@ function loadMetric(key) {
         }]
     };
 
+    if ("metric_plot" in window) {
+        window.metric_plot.destroy();
+        window.metric_plot = undefined;
+    }
     var ctx = document.getElementById("metric-plot");
-    new Chart(ctx, {
+    window.metric_plot = new Chart(ctx, {
         type: 'line',
         data: data,
         options: {
