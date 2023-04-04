@@ -54,8 +54,11 @@ def format_kv_inline(handler, kvs, html=True):
             return ''
     if not isinstance(kvs, dict):
         kvs = json.loads(kvs)
-    kvs = {k: kvs[k] for k in sorted(kvs.keys())}
-    ret = '; '.join(['{}={}'.format(k, '{:.6f}'.format(v) if isinstance(v, (float)) else v) for k, v in kvs.items()])
+    if isinstance(kvs, dict):
+        kvs = {k: kvs[k] for k in sorted(kvs.keys())}
+        ret = '; '.join(['{}={}'.format(k, '{:.6f}'.format(v) if isinstance(v, (float)) else v) for k, v in kvs.items()])
+    else:
+        ret = str(kvs)
     if html:
         return '<code>' + ret + '</code>'
     return ret
