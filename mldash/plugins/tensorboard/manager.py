@@ -36,7 +36,7 @@ def _check_port_usage(port):
     return True
 
 
-def find_port(start=6006, max_tries=40):
+def find_port(start=8081, max_tries=40):
     for x in range(start, start + max_tries):
         if _check_port_usage(x):
             return x

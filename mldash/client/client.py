@@ -53,7 +53,7 @@ class MLDashClient(object):
 
         if configs is not None:
             run.configs = io.dumps_json(configs)
-            highlight_configs = get_highlight_configs(configs)
+            highlight_configs = get_highlight_configs(args)
             if highlight_configs is not None:
                 run.highlight_configs = io.dumps_json(highlight_configs)
 
