@@ -53,8 +53,9 @@ class MLDashClient(object):
 
         if configs is not None:
             run.configs = io.dumps_json(configs)
-            if getattr(args, 'configs', None) is not None:
-                run.highlight_configs = io.dumps_json(args.configs.kvs)
+            highlight_configs = get_highlight_configs(configs)
+            if highlight_configs is not None:
+                run.highlight_configs = io.dumps_json(highlight_configs)
 
         save_retry(run)
 
@@ -142,4 +143,33 @@ def save_retry(model, max_retries=5, wait=(5, 20)):
             last_exc = e
     if not flag:
         logger.warning('Database update failed after {} trials. Last exception message is {}.'.format(max_retries, last_exc))
+
+
+def get_highlight_configs_raw(args):
+    if hasattr(args, 'configs'):
+        return args.configs
+    elif hasattr(args, 'config'):
+        return args.config
+    else:
+        return None
+
+
+def get_highlight_configs(args):
+    configs = get_highlight_configs_raw(args)
+    if configs is None:
+        return None
+
+    from jacinle.cli.argument import _KV
+
+    data = dict()
+    if isinstance(configs, (tuple, list)):
+        for configs_kv in configs:
+            if isinstance(configs_kv, _KV):
+                for k, v in configs_kv.kvs:
+                    data[k] = v
+    elif isinstance(configs, _KV):
+        for k, v in configs.kvs:
+            data[k] = v
+
+    return data
 
