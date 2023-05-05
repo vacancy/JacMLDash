@@ -9,6 +9,7 @@
 # Distributed under terms of the MIT license.
 
 import json
+import time
 from jacinle.web.app import route, JacRequestHandler
 from mldash.orm import ProjectMetainfo, Desc
 from mldash.web.ui_methods import get_ui_methods
@@ -38,6 +39,16 @@ class APISearchListHandler(JacRequestHandler):
     def get(self):
         self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
 
+        if not hasattr(Desc, 'search_list') or not hasattr(Desc, 'search_list_ts'):
+            Desc.search_list = self.get_search_list()
+            Desc.search_list_ts = time.time()
+        elif time.time() - Desc.search_list_ts > 60:
+            Desc.search_list = self.get_search_list()
+            Desc.search_list_ts = time.time()
+
+        self.write(json.dumps(Desc.search_list))
+
+    def get_search_list(self):
         descs = Desc.select().execute()
         outputs = list()
         for desc in descs:
