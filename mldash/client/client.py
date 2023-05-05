@@ -31,9 +31,9 @@ class MLDashClient(object):
         self.run = None
 
     def _refresh(self):
-        self.desc = Desc.get_by_id(self.desc.get_id())
-        self.expr = Experiment.get_by_id(self.expr.get_id())
-        self.run = Run.get_by_id(self.run.get_id())
+        self.desc = load_retry(Desc, self.desc)
+        self.expr = load_retry(Experiment, self.expr)
+        self.run = load_retry(Run, self.run)
 
     def init(self, desc_name, expr_name, run_name, args=None, highlight_args=None, configs=None):
         desc, _ = Desc.get_or_create(desc_name=desc_name)
@@ -130,7 +130,19 @@ def get_default_value_in_parser(parser, key):
     return None
 
 
-def save_retry(model, max_retries=5, wait=(5, 20)):
+def load_retry(cls, default, max_retries=5, wait=(10, 200)):
+    last_exc = None
+    for i in range(max_retries):
+        try:
+            return cls.get_by_id(default.get_id())
+        except peewee.OperationalError as e:
+            time.sleep(1 / 1000 * random.randint(wait[0], wait[1]))
+            last_exc = e
+    logger.warning('Database refresh failed after {} trials. Last exception message is {}.'.format(max_retries, last_exc))
+    return default
+
+
+def save_retry(model, max_retries=5, wait=(10, 200)):
     flag = False
     last_exc = None
     for i in range(max_retries):
@@ -139,7 +151,7 @@ def save_retry(model, max_retries=5, wait=(5, 20)):
             flag = True
             break
         except peewee.OperationalError as e:
-            time.sleep(1/1000 * random.randint(wait[0], wait[1]))
+            time.sleep(1 / 1000 * random.randint(wait[0], wait[1]))
             last_exc = e
     if not flag:
         logger.warning('Database update failed after {} trials. Last exception message is {}.'.format(max_retries, last_exc))
