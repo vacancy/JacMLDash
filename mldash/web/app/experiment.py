@@ -74,7 +74,7 @@ class RunHandler(JacRequestHandler):
             return
 
         run_metainfo = dict()
-        if run.metainfo_file != '':
+        if run.metainfo_file != '' and osp.isfile(run.metainfo_file):
             with open(run.metainfo_file) as f:
                 run_metainfo = json.load(f)
 
