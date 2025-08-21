@@ -74,12 +74,12 @@ class RunHandler(JacRequestHandler):
             return
 
         run_metainfo = dict()
-        if run.metainfo_file != '' and osp.isfile(run.metainfo_file):
+        if run.metainfo_file is not None and run.metainfo_file != '' and osp.isfile(run.metainfo_file):
             with open(run.metainfo_file) as f:
                 run_metainfo = json.load(f)
 
         run_metrics = list()
-        if run.meter_file != '' and osp.isfile(run.meter_file):
+        if run.meter_file is not None and run.meter_file != '' and osp.isfile(run.meter_file):
             try:
                 with open(run.meter_file) as f:
                     metrics_str = f.read()
